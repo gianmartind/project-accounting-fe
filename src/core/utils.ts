@@ -1,7 +1,7 @@
 import { type RouteItem } from "../routes";
 
 const findRouteByPath = (path: string, routes: RouteItem[]) => {
-  return routes.find((route) => route.path === path);
+  return routes.find((route) => route.path.startsWith(path));
 };
 
 const displayDate = (date: Date): string => {

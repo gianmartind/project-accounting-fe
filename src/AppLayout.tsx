@@ -1,7 +1,11 @@
 import { Layout, Menu, PageHeader } from "@arco-design/web-react";
 import Content from "@arco-design/web-react/es/Layout/content";
 import Sider from "@arco-design/web-react/es/Layout/sider";
-import { IconCaretRight, IconCaretLeft } from "@arco-design/web-react/icon";
+import {
+  IconCaretRight,
+  IconCaretLeft,
+  IconMenu,
+} from "@arco-design/web-react/icon";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import "./App.css";
 import { useEffect, useState } from "react";
@@ -13,13 +17,15 @@ const MenuItem = Menu.Item;
 const AppLayout = () => {
   const [collapsed, setCollapsed] = useState<boolean>();
   const menuItem = routes.map((route, index) => {
-    const MenuIcon = route.icon;
-    return (
-      <MenuItem key={String(index)}>
-        <MenuIcon />
-        {route.title}
-      </MenuItem>
-    );
+    if (route.sidebarMenu) {
+      const MenuIcon = route.icon ?? IconMenu;
+      return (
+        <MenuItem key={String(index)}>
+          <MenuIcon />
+          {route.title}
+        </MenuItem>
+      );
+    }
   });
 
   const navigate = useNavigate();
