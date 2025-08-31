@@ -1,5 +1,5 @@
 import { Button, Space, Table } from "@arco-design/web-react";
-import type { ProjectListItem } from "../project.interface";
+import type { ProjectSimple } from "../project.interface";
 import { useEffect, useRef, useState } from "react";
 import useProjectServices from "../project.services";
 import { IconExpand } from "@arco-design/web-react/icon";
@@ -22,7 +22,7 @@ const ProjectPage = () => {
       key: "end_date",
       title: "End Date",
       dataIndex: "end_date",
-      render: (_: unknown, record: ProjectListItem) => {
+      render: (_: unknown, record: ProjectSimple) => {
         return <>{record.end_date ? record.end_date : "(ongoing)"}</>;
       },
     },
@@ -31,7 +31,7 @@ const ProjectPage = () => {
       title: "Action",
       dataIndex: "action",
       width: 1,
-      render: (_: unknown, record: ProjectListItem) => {
+      render: (_: unknown, record: ProjectSimple) => {
         return (
           <Button
             type="text"
@@ -45,7 +45,7 @@ const ProjectPage = () => {
     },
   ]);
 
-  const [projectList, setProjectList] = useState<ProjectListItem[]>([]);
+  const [projectList, setProjectList] = useState<ProjectSimple[]>([]);
   const { fetchProjects } = useProjectServices();
 
   useEffect(() => {

@@ -1,0 +1,4 @@
+export const NOTIFICATION_MESSAGE = {
+    SAVE_SUCCESS: "Data saved successfuly",
+    SAVE_FAILED: "Failed to save data"
+}

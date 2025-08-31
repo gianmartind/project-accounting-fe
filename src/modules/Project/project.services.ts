@@ -1,4 +1,4 @@
-import type { ProjectListItem } from "./project.interface";
+import type { ProjectDetail, ProjectSimple } from "./project.interface";
 import { PROJECT_API_ENDPOINTS } from "./project.api";
 import { http } from "../../core/http";
 
@@ -6,17 +6,33 @@ const useProjectServices = () => {
   const fetchProjects = async (
     page: number,
     size: number
-  ): Promise<ProjectListItem[]> => {
+  ): Promise<ProjectSimple[]> => {
     const response = await http.get(PROJECT_API_ENDPOINTS.LIST, {
       params: {
         page: page,
         size: size,
       },
     });
-    return response.data.content as ProjectListItem[];
+    return Promise.resolve(response.data.content as ProjectSimple[]);
   };
 
-  return { fetchProjects };
+  const getProjectDetail = async (uuid: string): Promise<ProjectDetail> => {
+    const response = await http.get(`${PROJECT_API_ENDPOINTS.DETAIL}/${uuid}`);
+    return Promise.resolve(response.data as ProjectDetail);
+  };
+
+  const updateProject = async (
+    uuid: string,
+    body: ProjectDetail
+  ): Promise<ProjectDetail> => {
+    const response = await http.post(
+      `${PROJECT_API_ENDPOINTS.UPDATE}/${uuid}`,
+      body
+    );
+    return Promise.resolve(response.data as ProjectDetail);
+  };
+
+  return { fetchProjects, getProjectDetail, updateProject };
 };
 
 export default useProjectServices;
