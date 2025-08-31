@@ -56,7 +56,7 @@ const ProjectDetailPage = () => {
         width: "100%",
       }}
     >
-      <Typography.Title heading={}>Detail Proyek</Typography.Title>
+      <Typography.Title heading={5}>Detail Proyek</Typography.Title>
       <Form form={form}>
         <Form.Item
           label="Nama Proyek"
