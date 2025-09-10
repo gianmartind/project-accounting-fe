@@ -32,7 +32,12 @@ const useProjectServices = () => {
     return Promise.resolve(response.data as ProjectDetail);
   };
 
-  return { fetchProjects, getProjectDetail, updateProject };
+  const insertProject = async (body: ProjectDetail) => {
+    const response = await http.post(`${PROJECT_API_ENDPOINTS.INSERT}`, body);
+    return Promise.resolve(response.data as ProjectDetail);
+  };
+
+  return { fetchProjects, getProjectDetail, updateProject, insertProject };
 };
 
 export default useProjectServices;

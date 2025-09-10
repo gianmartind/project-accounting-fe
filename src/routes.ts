@@ -4,8 +4,9 @@ import {
   type IconProps,
 } from "@arco-design/web-react/icon";
 import ProjectPage from "./modules/Project/view/ProjectPage";
-import PurchasePage from "./modules/PurchasePage";
+import PurchasePage from "./modules/Purchase/view/PurchasePage";
 import ProjectDetailPage from "./modules/Project/view/ProjectDetailPage";
+import ProjectNewPage from "./modules/Project/view/ProjectNewPage";
 
 export type RouteItem = {
   path: string;
@@ -29,6 +30,11 @@ export const routes: RouteItem[] = [
     path: "/project/detail/:uuid",
     title: "Proyek",
     component: ProjectDetailPage,
+  },
+  {
+    path: "/project/new",
+    title: "Proyek",
+    component: ProjectNewPage,
   },
   {
     path: "/purchase",

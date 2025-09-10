@@ -2,8 +2,7 @@ import { Button, Space, Table } from "@arco-design/web-react";
 import type { ProjectSimple } from "../project.interface";
 import { useEffect, useRef, useState } from "react";
 import useProjectServices from "../project.services";
-import { IconExpand } from "@arco-design/web-react/icon";
-import Row from "@arco-design/web-react/es/Grid/row";
+import { IconExpand, IconPlus } from "@arco-design/web-react/icon";
 import { useNavigate } from "react-router";
 
 const ProjectPage = () => {
@@ -56,6 +55,9 @@ const ProjectPage = () => {
   const handleOpenProjectDetail = (uuid: string) => {
     navigate(`/project/detail/${uuid}`);
   };
+  const handleAddNewProject = () => {
+    navigate("/project/new");
+  };
 
   return (
     <div>
@@ -65,7 +67,15 @@ const ProjectPage = () => {
           width: "100%",
         }}
       >
-        <Row></Row>
+        <Space style={{ width: "100%" }} direction="vertical" align="end">
+          <Button
+            type="primary"
+            icon={<IconPlus />}
+            onClick={handleAddNewProject}
+          >
+            Add New Project
+          </Button>
+        </Space>
         <Table rowKey="uuid" columns={columns.current} data={projectList} />
       </Space>
     </div>
