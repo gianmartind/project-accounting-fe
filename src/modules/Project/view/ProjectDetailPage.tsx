@@ -5,7 +5,7 @@ import useProjectServices from "../project.services";
 import type { ProjectDetail } from "../project.interface";
 import useNotification from "../../../core/notification.services";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
-import ProjectForm from "../component/ProjectForm";
+import ProjectForm from "../components/ProjectForm";
 
 const ProjectDetailPage = () => {
   const { uuid } = useParams();

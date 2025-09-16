@@ -7,6 +7,7 @@ import ProjectPage from "./modules/Project/view/ProjectPage";
 import PurchasePage from "./modules/Purchase/view/PurchasePage";
 import ProjectDetailPage from "./modules/Project/view/ProjectDetailPage";
 import ProjectNewPage from "./modules/Project/view/ProjectNewPage";
+import PurchaseNewPage from "./modules/Purchase/view/PurchaseNewPage";
 
 export type RouteItem = {
   path: string;
@@ -42,5 +43,11 @@ export const routes: RouteItem[] = [
     icon: IconBook,
     component: PurchasePage,
     sidebarMenu: true,
+  },
+  {
+    path: "/purchase/new",
+    title: "Pembelian",
+    icon: IconBook,
+    component: PurchaseNewPage,
   },
 ];

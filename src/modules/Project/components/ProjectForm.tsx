@@ -7,6 +7,7 @@ import {
   Form,
 } from "@arco-design/web-react";
 import type { ProjectDetail } from "../project.interface";
+import { IconSave } from "@arco-design/web-react/icon";
 
 type Props = {
   form: FormInstance<ProjectDetail>;
@@ -16,12 +17,16 @@ type Props = {
 };
 
 const ProjectForm = ({ form, onValuesChange, saveDisabled, onSave }: Props) => {
+  const required = [{
+    required: true,
+    message: "Required"
+  }]
   return (
     <Form form={form} onValuesChange={onValuesChange}>
-      <Form.Item label="Nama Proyek" field="name" rules={[{ required: true }]}>
+      <Form.Item label="Nama Proyek" field="name" rules={required}>
         <Input maxLength={32} showWordLimit />
       </Form.Item>
-      <Form.Item label="Alamat" field="address" rules={[{ required: true }]}>
+      <Form.Item label="Alamat" field="address" rules={required}>
         <Input.TextArea
           style={{ minHeight: 64 }}
           maxLength={255}
@@ -34,7 +39,7 @@ const ProjectForm = ({ form, onValuesChange, saveDisabled, onSave }: Props) => {
             <Form.Item
               label="Mulai"
               field="start_date"
-              rules={[{ required: true }]}
+              rules={required}
             >
               <DatePicker placeholder="Please select" />
             </Form.Item>
@@ -56,7 +61,7 @@ const ProjectForm = ({ form, onValuesChange, saveDisabled, onSave }: Props) => {
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 5 }}>
         <Button type="primary" onClick={onSave} disabled={saveDisabled}>
-          Save
+          <IconSave /> Save
         </Button>
       </Form.Item>
     </Form>
