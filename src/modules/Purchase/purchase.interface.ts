@@ -1,6 +1,7 @@
 export interface PurchaseDetail {
   uuid: string;
-  store_name: string;
+  store_uuid: string;
+  project_uuid: string;
   date: string;
   items: PurchaseItem[];
   notes: string;

@@ -39,8 +39,11 @@ const PurchaseNewPage = () => {
     >
       <Typography.Title heading={5}>Pembelian Baru</Typography.Title>
       <Form form={form}>
-        <Form.Item label="Toko" field="store_name" rules={required}>
+        <Form.Item label="Toko" field="store_uuid" rules={required}>
           <Select allowCreate allowClear placeholder="Nama Toko" />
+        </Form.Item>
+        <Form.Item label="Proyek" field="project_uuid" rules={required}>
+          <Select allowCreate allowClear placeholder="Nama Proyek" />
         </Form.Item>
         <Form.Item label="Tanggal" field="date" rules={required}>
           <DatePicker placeholder="Please select" />
