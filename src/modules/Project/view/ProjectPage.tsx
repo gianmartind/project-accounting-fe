@@ -1,7 +1,7 @@
 import { Button, Space, Table } from "@arco-design/web-react";
 import type { ProjectSimple } from "../project.interface";
 import { useEffect, useRef, useState } from "react";
-import useProjectServices from "../project.services";
+import useProjectService from "../project.service";
 import { IconExpand, IconPlus } from "@arco-design/web-react/icon";
 import { useNavigate } from "react-router";
 
@@ -45,7 +45,7 @@ const ProjectPage = () => {
   ]);
 
   const [projectList, setProjectList] = useState<ProjectSimple[]>([]);
-  const { fetchProjects } = useProjectServices();
+  const { fetchProjects } = useProjectService();
 
   useEffect(() => {
     fetchProjects(0, 10).then((response) => setProjectList(response));

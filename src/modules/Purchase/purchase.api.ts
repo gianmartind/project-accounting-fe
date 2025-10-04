@@ -1,0 +1,9 @@
+export const PURCHASE_API_BASE_URL = `/purchase`;
+export const PURCHASE_API_ENDPOINTS = {
+  LIST: `${PURCHASE_API_BASE_URL}/list`,
+  LIST_ITEM_TYPES: `${PURCHASE_API_BASE_URL}/list-types`,
+  DETAIL: `${PURCHASE_API_BASE_URL}/detail`,
+  INSERT: `${PURCHASE_API_BASE_URL}/insert`,
+  UPDATE: `${PURCHASE_API_BASE_URL}/update`,
+  DELETE: `${PURCHASE_API_BASE_URL}/delete`,
+};

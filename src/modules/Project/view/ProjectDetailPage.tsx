@@ -1,7 +1,7 @@
 import { Divider, Form, Space, Typography } from "@arco-design/web-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import useProjectServices from "../project.services";
+import useProjectService from "../project.service";
 import type { ProjectDetail } from "../project.interface";
 import useNotification from "../../../core/notification.services";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
@@ -9,7 +9,7 @@ import ProjectForm from "../components/ProjectForm";
 
 const ProjectDetailPage = () => {
   const { uuid } = useParams();
-  const { getProjectDetail, updateProject } = useProjectServices();
+  const { getProjectDetail, updateProject } = useProjectService();
   const [originalProjectDetail, setOriginalProjectDetail] =
     useState<ProjectDetail>();
 

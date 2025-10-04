@@ -8,14 +8,14 @@ import type { ProjectDetail } from "../project.interface";
 import useNotification from "../../../core/notification.services";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
 import ProjectForm from "../components/ProjectForm";
-import useProjectServices from "../project.services";
+import useProjectService from "../project.service";
 import { useNavigate } from "react-router";
 
 const ProjectNewPage = () => {
   const [form] = Form.useForm<ProjectDetail>();
 
   const navigate = useNavigate();
-  const { insertProject } = useProjectServices();
+  const { insertProject } = useProjectService();
   const { success, failed } = useNotification();
   const handleSave = async () => {
     try {

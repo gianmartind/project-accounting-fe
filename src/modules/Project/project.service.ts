@@ -2,7 +2,7 @@ import type { ProjectDetail, ProjectSimple } from "./project.interface";
 import { PROJECT_API_ENDPOINTS } from "./project.api";
 import { http } from "../../core/http";
 
-const useProjectServices = () => {
+const useProjectService = () => {
   const fetchProjects = async (
     page: number,
     size: number
@@ -40,4 +40,4 @@ const useProjectServices = () => {
   return { fetchProjects, getProjectDetail, updateProject, insertProject };
 };
 
-export default useProjectServices;
+export default useProjectService;

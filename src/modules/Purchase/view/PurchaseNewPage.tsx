@@ -11,11 +11,30 @@ import {
   Button,
 } from "@arco-design/web-react";
 import { UNIT, type PurchaseDetail } from "../purchase.interface";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IconDelete, IconPlus, IconSave } from "@arco-design/web-react/icon";
+import usePurchaseService from "../purchase.service";
+import useNotification from "../../../core/notification.services";
+import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
+import useProjectService from "../../Project/project.service";
+import useStoreService from "../../store/store.service";
 
 const PurchaseNewPage = () => {
+  const { insertPurchase, fetchItemTypes } = usePurchaseService();
+  const { fetchProjects } = useProjectService();
+  const { fetchStoresName } = useStoreService();
+
+  const { success, failed } = useNotification();
+
   const [form] = Form.useForm<PurchaseDetail>();
+  const [storesName, setStoresName] = useState<string[]>();
+  const [typesList, setTypesList] = useState<string[]>();
+  const [projectOptions, setProjectOptions] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >();
   const unitOptions = useRef(
     Object.entries(UNIT).map(([key, val]) => {
       return {
@@ -24,6 +43,37 @@ const PurchaseNewPage = () => {
       };
     })
   );
+
+  useEffect(() => {
+    fetchProjects(0, 9999).then((response) => {
+      const optionList = response.map((item) => {
+        return {
+          label: item.name,
+          value: item.uuid,
+        };
+      });
+      setProjectOptions(optionList);
+    });
+    fetchStoresName().then((response) => {
+      setStoresName(response);
+    });
+    fetchItemTypes().then((response) => {
+      setTypesList(response);
+    });
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      await form.validate();
+      const response = await insertPurchase(
+        form.getFieldsValue() as PurchaseDetail
+      );
+      success(NOTIFICATION_MESSAGE.SAVE_SUCCESS);
+    } catch (err) {
+      failed(NOTIFICATION_MESSAGE.SAVE_FAILED);
+    }
+  };
+
   const required = [
     {
       required: true,
@@ -39,11 +89,20 @@ const PurchaseNewPage = () => {
     >
       <Typography.Title heading={5}>Pembelian Baru</Typography.Title>
       <Form form={form}>
-        <Form.Item label="Toko" field="store_uuid" rules={required}>
-          <Select allowCreate allowClear placeholder="Nama Toko" />
+        <Form.Item label="Toko" field="store_name" rules={required}>
+          <Select
+            allowCreate
+            allowClear
+            placeholder="Nama Toko"
+            options={storesName}
+          />
         </Form.Item>
         <Form.Item label="Proyek" field="project_uuid" rules={required}>
-          <Select allowCreate allowClear placeholder="Nama Proyek" />
+          <Select
+            allowClear
+            placeholder="Nama Proyek"
+            options={projectOptions}
+          />
         </Form.Item>
         <Form.Item label="Tanggal" field="date" rules={required}>
           <DatePicker placeholder="Please select" />
@@ -84,6 +143,7 @@ const PurchaseNewPage = () => {
                                   allowCreate
                                   allowClear
                                   placeholder="Jenis"
+                                  options={typesList}
                                 />
                               </Form.Item>
                             </Grid.Col>
@@ -153,13 +213,7 @@ const PurchaseNewPage = () => {
           </Form.List>
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 5 }}>
-          <Button
-            type="primary"
-            onClick={() => {
-              console.log(form.getFieldsValue());
-            }}
-            disabled={false}
-          >
+          <Button type="primary" onClick={handleSave} disabled={false}>
             <IconSave /> Save
           </Button>
         </Form.Item>
