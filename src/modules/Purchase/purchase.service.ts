@@ -1,19 +1,58 @@
 import { http } from "../../core/http";
 import { PURCHASE_API_ENDPOINTS } from "./purchase.api";
-import type { PurchaseDetail } from "./purchase.interface"
+import type { PurchaseDetail, PurchaseListRecord } from "./purchase.interface";
 
 const usePurchaseService = () => {
-    const insertPurchase = async (body: PurchaseDetail) => {
-        const response = await http.post(`${PURCHASE_API_ENDPOINTS.INSERT}`, body);
-        return Promise.resolve(response.data as PurchaseDetail);
-    }
+  const fetchPurchaseRecord = async (
+    page: number,
+    size: number
+  ): Promise<PurchaseListRecord[]> => {
+    const response = await http.get(PURCHASE_API_ENDPOINTS.LIST, {
+      params: {
+        page: page,
+        size: size,
+      },
+    });
+    return Promise.resolve(response.data.content as PurchaseListRecord[]);
+  };
 
-    const fetchItemTypes = async () => {
-        const response = await http.get(`${PURCHASE_API_ENDPOINTS.LIST_ITEM_TYPES}`);
-        return Promise.resolve(response.data as string[]);
-    }
+  const insertPurchase = async (
+    body: PurchaseDetail
+  ): Promise<PurchaseDetail> => {
+    const response = await http.post(`${PURCHASE_API_ENDPOINTS.INSERT}`, body);
+    return Promise.resolve(response.data as PurchaseDetail);
+  };
 
-    return { insertPurchase, fetchItemTypes }
-}
+  const updatePurchase = async (
+    uuid: string,
+    body: PurchaseDetail
+  ): Promise<PurchaseDetail> => {
+    const response = await http.post(
+      `${PURCHASE_API_ENDPOINTS.UPDATE}/${uuid}`,
+      body
+    );
+    return Promise.resolve(response.data as PurchaseDetail);
+  };
+
+  const fetchItemTypes = async (): Promise<string[]> => {
+    const response = await http.get(
+      `${PURCHASE_API_ENDPOINTS.LIST_ITEM_TYPES}`
+    );
+    return Promise.resolve(response.data as string[]);
+  };
+
+  const fetchPurchaseDetail = async (uuid: string): Promise<PurchaseDetail> => {
+    const response = await http.get(`${PURCHASE_API_ENDPOINTS.DETAIL}/${uuid}`);
+    return Promise.resolve(response.data as PurchaseDetail);
+  };
+
+  return {
+    fetchPurchaseRecord,
+    insertPurchase,
+    updatePurchase,
+    fetchItemTypes,
+    fetchPurchaseDetail,
+  };
+};
 
 export default usePurchaseService;

@@ -8,25 +8,39 @@ import {
 } from "@arco-design/web-react";
 import type { ProjectDetail } from "../project.interface";
 import { IconSave } from "@arco-design/web-react/icon";
+import { useRef, useState } from "react";
 
 type Props = {
   form: FormInstance<ProjectDetail>;
   onValuesChange?: () => void;
-  saveDisabled: boolean;
+  saveDisabled?: boolean;
   onSave: () => void;
 };
 
-const ProjectForm = ({ form, onValuesChange, saveDisabled, onSave }: Props) => {
-  const required = [{
-    required: true,
-    message: "Required"
-  }]
+const ProjectForm = ({
+  form,
+  onValuesChange,
+  saveDisabled = false,
+  onSave,
+}: Props) => {
+  const required = useRef([
+    {
+      required: true,
+      message: "Required",
+    },
+  ]);
+  const [saveLoading, setSaveLoading] = useState<boolean>(false);
+  const handleSave = async () => {
+    setSaveLoading(true);
+    await onSave();
+    setSaveLoading(false);
+  };
   return (
     <Form form={form} onValuesChange={onValuesChange}>
-      <Form.Item label="Nama Proyek" field="name" rules={required}>
+      <Form.Item label="Nama Proyek" field="name" rules={required.current}>
         <Input maxLength={32} showWordLimit />
       </Form.Item>
-      <Form.Item label="Alamat" field="address" rules={required}>
+      <Form.Item label="Alamat" field="address" rules={required.current}>
         <Input.TextArea
           style={{ minHeight: 64 }}
           maxLength={255}
@@ -39,7 +53,7 @@ const ProjectForm = ({ form, onValuesChange, saveDisabled, onSave }: Props) => {
             <Form.Item
               label="Mulai"
               field="start_date"
-              rules={required}
+              rules={required.current}
             >
               <DatePicker placeholder="Please select" />
             </Form.Item>
@@ -60,7 +74,12 @@ const ProjectForm = ({ form, onValuesChange, saveDisabled, onSave }: Props) => {
         />
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 5 }}>
-        <Button type="primary" onClick={onSave} disabled={saveDisabled}>
+        <Button
+          type="primary"
+          loading={saveLoading}
+          onClick={handleSave}
+          disabled={saveDisabled}
+        >
           <IconSave /> Save
         </Button>
       </Form.Item>

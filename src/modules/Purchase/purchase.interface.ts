@@ -2,7 +2,7 @@ export interface PurchaseDetail {
   uuid: string;
   store_name: string;
   project_uuid: string;
-  date: string;
+  purchase_date: string;
   items: PurchaseItem[];
   notes: string;
 }
@@ -15,6 +15,14 @@ export interface PurchaseItem {
   unit?: Unit;
   price?: number;
   purchase_uuid: string;
+}
+
+export interface PurchaseListRecord {
+  uuid: string;
+  project_name: string;
+  store_name: string;
+  purchase_date: string;
+  total_price: number;
 }
 
 export const UNIT = {

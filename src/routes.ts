@@ -8,6 +8,7 @@ import PurchasePage from "./modules/Purchase/view/PurchasePage";
 import ProjectDetailPage from "./modules/Project/view/ProjectDetailPage";
 import ProjectNewPage from "./modules/Project/view/ProjectNewPage";
 import PurchaseNewPage from "./modules/Purchase/view/PurchaseNewPage";
+import PurchaseDetailPage from "./modules/Purchase/view/PuchaseDetailPage";
 
 export type RouteItem = {
   path: string;
@@ -45,9 +46,13 @@ export const routes: RouteItem[] = [
     sidebarMenu: true,
   },
   {
+    path: "/purchase/detail/:uuid",
+    title: "Pembelian",
+    component: PurchaseDetailPage,
+  },
+  {
     path: "/purchase/new",
     title: "Pembelian",
-    icon: IconBook,
     component: PurchaseNewPage,
   },
 ];
