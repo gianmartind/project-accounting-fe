@@ -1,16 +1,24 @@
-import { Space, Typography, Divider, Form } from "@arco-design/web-react";
+import { Space, Typography, Form } from "@arco-design/web-react";
 import { type PurchaseDetail } from "../purchase.interface";
 import usePurchaseService from "../purchase.service";
 import useNotification from "../../../core/notification.services";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
 import PurchaseForm from "../components/PurchaseForm";
+import { useParams } from "react-router";
+import { useEffect } from "react";
 
 const PurchaseNewPage = () => {
+  const { projectUuid } = useParams();
   const { insertPurchase } = usePurchaseService();
 
   const { success, failed } = useNotification();
 
   const [form] = Form.useForm<PurchaseDetail>();
+  useEffect(() => {
+    if (projectUuid) {
+      form.setFieldValue("project_uuid", projectUuid);
+    }
+  }, [projectUuid]);
 
   const handleSave = async () => {
     try {
@@ -33,7 +41,6 @@ const PurchaseNewPage = () => {
     >
       <Typography.Title heading={5}>Pembelian Baru</Typography.Title>
       <PurchaseForm form={form} onSave={handleSave} />
-      <Divider />
     </Space>
   );
 };

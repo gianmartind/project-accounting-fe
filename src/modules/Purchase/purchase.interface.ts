@@ -17,6 +17,14 @@ export interface PurchaseItem {
   purchase_uuid: string;
 }
 
+export interface PurchaseListRecordResponse {
+  content: PurchaseListRecord[];
+  total_elements: number;
+  total_pages: number;
+  size: number;
+  number: number;
+}
+
 export interface PurchaseListRecord {
   uuid: string;
   project_name: string;
@@ -31,3 +39,13 @@ export const UNIT = {
   GRAM: "GRAM",
 };
 type Unit = (typeof UNIT)[keyof typeof UNIT];
+
+export interface PurchaseListRecordRequest {
+  store_name?: string;
+  store_uuid?: string;
+  project_name?: string;
+  project_uuid?: string;
+  purchase_date?: string;
+  page: number;
+  size: number;
+}

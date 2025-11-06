@@ -1,19 +1,19 @@
 import { http } from "../../core/http";
 import { PURCHASE_API_ENDPOINTS } from "./purchase.api";
-import type { PurchaseDetail, PurchaseListRecord } from "./purchase.interface";
+import type {
+  PurchaseDetail,
+  PurchaseListRecordRequest,
+  PurchaseListRecordResponse,
+} from "./purchase.interface";
 
 const usePurchaseService = () => {
   const fetchPurchaseRecord = async (
-    page: number,
-    size: number
-  ): Promise<PurchaseListRecord[]> => {
+    param: PurchaseListRecordRequest
+  ): Promise<PurchaseListRecordResponse> => {
     const response = await http.get(PURCHASE_API_ENDPOINTS.LIST, {
-      params: {
-        page: page,
-        size: size,
-      },
+      params: param,
     });
-    return Promise.resolve(response.data.content as PurchaseListRecord[]);
+    return Promise.resolve(response.data as PurchaseListRecordResponse);
   };
 
   const insertPurchase = async (

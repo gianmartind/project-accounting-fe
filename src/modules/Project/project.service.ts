@@ -1,4 +1,4 @@
-import type { ProjectDetail, ProjectSimple } from "./project.interface";
+import type { ProjectDetail, ProjectSimpleResponse } from "./project.interface";
 import { PROJECT_API_ENDPOINTS } from "./project.api";
 import { http } from "../../core/http";
 
@@ -6,14 +6,14 @@ const useProjectService = () => {
   const fetchProjects = async (
     page: number,
     size: number
-  ): Promise<ProjectSimple[]> => {
+  ): Promise<ProjectSimpleResponse> => {
     const response = await http.get(PROJECT_API_ENDPOINTS.LIST, {
       params: {
         page: page,
         size: size,
       },
     });
-    return Promise.resolve(response.data.content as ProjectSimple[]);
+    return Promise.resolve(response.data as ProjectSimpleResponse);
   };
 
   const getProjectDetail = async (uuid: string): Promise<ProjectDetail> => {

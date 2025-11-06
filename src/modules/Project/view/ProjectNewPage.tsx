@@ -1,5 +1,4 @@
 import {
-  Divider,
   Form,
   Space,
   Typography,
@@ -41,7 +40,6 @@ const ProjectNewPage = () => {
         saveDisabled={false}
         onSave={handleSave}
       />
-      <Divider />
     </Space>
   );
 };

@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 import usePurchaseService from "../purchase.service";
 import { useEffect, useState } from "react";
 import type { PurchaseDetail } from "../purchase.interface";
-import { Divider, Form, Space, Typography } from "@arco-design/web-react";
+import { Form, Space, Typography } from "@arco-design/web-react";
 import PurchaseForm from "../components/PurchaseForm";
 import useNotification from "../../../core/notification.services";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
@@ -64,7 +64,6 @@ const PurchaseDetailPage = () => {
         saveDisabled={!formIsValid}
         onSave={handleSave}
       />
-      <Divider />
     </Space>
   );
 };

@@ -51,7 +51,7 @@ export const routes: RouteItem[] = [
     component: PurchaseDetailPage,
   },
   {
-    path: "/purchase/new",
+    path: "/purchase/new/:projectUuid?",
     title: "Pembelian",
     component: PurchaseNewPage,
   },
