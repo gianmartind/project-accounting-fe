@@ -5,7 +5,6 @@ import useNotification from "../../../core/notification.services";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
 import PurchaseForm from "../components/PurchaseForm";
 import { useParams } from "react-router";
-import { useEffect } from "react";
 
 const PurchaseNewPage = () => {
   const { projectUuid } = useParams();
@@ -14,11 +13,13 @@ const PurchaseNewPage = () => {
   const { success, failed } = useNotification();
 
   const [form] = Form.useForm<PurchaseDetail>();
-  useEffect(() => {
-    if (projectUuid) {
-      form.setFieldValue("project_uuid", projectUuid);
-    }
-  }, [projectUuid]);
+
+  const handlePreAssignProject = () => {
+    console.log('before', form.getFieldsValue())
+    if (!projectUuid) return;
+    form.setFieldValue("project_uuid", projectUuid);
+    console.log('after', form.getFieldsValue())
+  }
 
   const handleSave = async () => {
     try {
@@ -40,7 +41,7 @@ const PurchaseNewPage = () => {
       }}
     >
       <Typography.Title heading={5}>Pembelian Baru</Typography.Title>
-      <PurchaseForm form={form} onSave={handleSave} />
+      <PurchaseForm form={form} onSave={handleSave} onProjectOptionsLoaded={handlePreAssignProject}/>
     </Space>
   );
 };

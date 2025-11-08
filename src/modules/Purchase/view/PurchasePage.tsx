@@ -64,7 +64,7 @@ const PurchasePage = () => {
             icon={<IconPlus />}
             onClick={handleAddNewPurchase}
           >
-            Add New Purchase
+            Tambah Pembelian
           </Button>
         </Space>
         <PurchaseTable

@@ -19,6 +19,7 @@ import useStoreService from "../../store/store.service";
 type Props = {
   form: FormInstance<PurchaseDetail>;
   onValuesChange?: () => void;
+  onProjectOptionsLoaded?: () => void;
   saveDisabled?: boolean;
   onSave: () => void;
 };
@@ -26,6 +27,7 @@ type Props = {
 const PurchaseForm = ({
   form,
   onValuesChange,
+  onProjectOptionsLoaded,
   saveDisabled = false,
   onSave,
 }: Props) => {
@@ -62,13 +64,14 @@ const PurchaseForm = ({
   };
   useEffect(() => {
     fetchProjects(0, 9999).then((response) => {
-      const optionList = response.map((item) => {
+      const optionList = response.content.map((item) => {
         return {
           label: item.name,
           value: item.uuid,
         };
       });
       setProjectOptions(optionList);
+      onProjectOptionsLoaded && onProjectOptionsLoaded();
     });
     fetchStoresName().then((response) => {
       setStoresName(response);

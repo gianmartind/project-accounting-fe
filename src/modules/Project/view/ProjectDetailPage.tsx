@@ -1,4 +1,4 @@
-import { Form, Space, Typography } from "@arco-design/web-react";
+import { Button, Form, Space, Typography } from "@arco-design/web-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import useProjectService from "../project.service";
@@ -12,6 +12,7 @@ import type {
 } from "../../Purchase/purchase.interface";
 import usePurchaseService from "../../Purchase/purchase.service";
 import PurchaseTable from "../../Purchase/components/PurchaseTable";
+import { IconPlus } from "@arco-design/web-react/icon";
 
 const ProjectDetailPage = () => {
   const { uuid } = useParams();
@@ -60,12 +61,12 @@ const ProjectDetailPage = () => {
   const { fetchPurchaseRecord } = usePurchaseService();
 
   const [purchaseList, setPurchaseList] = useState<PurchaseListRecordResponse>({
-      content: [],
-      total_elements: 0,
-      total_pages: 1,
-      size: 10,
-      number: 1,
-    });
+    content: [],
+    total_elements: 0,
+    total_pages: 1,
+    size: 10,
+    number: 1,
+  });
   useEffect(() => {
     const param: PurchaseListRecordRequest = {
       project_uuid: uuid,
@@ -80,6 +81,10 @@ const ProjectDetailPage = () => {
   const handleOpenPurchaseDetail = (uuid: string) => {
     navigate(`/purchase/detail/${uuid}`);
   };
+  const handleAddNewPurchase = () => {
+    console.log(uuid)
+    navigate(`/purchase/new/${uuid}`);
+  };
   return (
     <Space direction="horizontal" align="start" size="medium">
       <Space direction="vertical">
@@ -93,6 +98,15 @@ const ProjectDetailPage = () => {
       </Space>
       <Space direction="vertical">
         <Typography.Title heading={5}>Pembelian Proyek</Typography.Title>
+        <Space style={{ width: "100%" }} direction="vertical" align="end">
+          <Button
+            type="primary"
+            icon={<IconPlus />}
+            onClick={handleAddNewPurchase}
+          >
+            Tambah Pembelian
+          </Button>
+        </Space>
         <PurchaseTable
           onPuchaseDetailOpen={handleOpenPurchaseDetail}
           data={purchaseList}

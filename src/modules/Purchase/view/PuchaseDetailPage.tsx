@@ -57,7 +57,7 @@ const PurchaseDetailPage = () => {
         width: "100%",
       }}
     >
-      <Typography.Title heading={5}>Detail Baru</Typography.Title>
+      <Typography.Title heading={5}>Detail Pembelian</Typography.Title>
       <PurchaseForm
         form={form}
         onValuesChange={validateForm}
