@@ -9,9 +9,11 @@ import type {
 } from "../purchase.interface";
 import usePurchaseService from "../purchase.service";
 import PurchaseTable from "../components/PurchaseTable";
+import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 
 const PurchasePage = () => {
-  const { fetchPurchaseRecord } = usePurchaseService();
+  const { fetchPurchaseRecord, fetchAvailableFilterOptions } =
+    usePurchaseService();
 
   const [purchaseList, setPurchaseList] = useState<PurchaseListRecordResponse>({
     content: [],
@@ -20,26 +22,42 @@ const PurchasePage = () => {
     size: 10,
     number: 1,
   });
+  const [projectOptions, setProjectOptions] = useState<Array<string>>([]);
+  const [storeOptions, setStoreOptions] = useState<Array<string>>([]);
 
-  const handleTableChange = (pagination: PaginationProps) => {
+  const handleTableChange = (
+    pagination: PaginationProps,
+    _: SorterInfo | SorterInfo[],
+    filters: Partial<Record<keyof PurchaseListRecord, string[]>>
+  ) => {
     const param: PurchaseListRecordRequest = {
       page: (pagination.current ?? 1) - 1,
       size: pagination.pageSize ?? 10,
+      project_name: filters.project_name ? filters.project_name[0] : undefined,
+      store_name: filters.store_name ? filters.store_name[0] : undefined,
     };
     getPurchaseRecordData(param);
-  }
+  };
 
   const getPurchaseRecordData = async (param: PurchaseListRecordRequest) => {
     const response = await fetchPurchaseRecord(param);
     setPurchaseList(response);
-  }
+  };
 
   useEffect(() => {
     const param: PurchaseListRecordRequest = {
       page: 0,
       size: 10,
     };
-    getPurchaseRecordData(param);
+    fetchAvailableFilterOptions()
+      .then((options) => {
+        console.log(options)
+        setProjectOptions(options.project_options);
+        setStoreOptions(options.store_options);
+      })
+      .then(() => {
+        getPurchaseRecordData(param);
+      });
   }, []);
 
   const navigate = useNavigate();
@@ -71,6 +89,8 @@ const PurchasePage = () => {
           onPuchaseDetailOpen={handleOpenPurchaseDetail}
           data={purchaseList}
           onTableChange={handleTableChange}
+          projectOptions={projectOptions}
+          storeOptions={storeOptions}
         />
       </Space>
     </div>

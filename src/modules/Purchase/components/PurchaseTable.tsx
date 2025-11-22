@@ -1,33 +1,69 @@
 import { Button, Table, type PaginationProps } from "@arco-design/web-react";
-import { IconExpand } from "@arco-design/web-react/icon";
-import { useEffect, useRef, useState } from "react";
+import { IconExpand, IconSearch } from "@arco-design/web-react/icon";
+import { useEffect, useState } from "react";
 import type {
   PurchaseListRecord,
   PurchaseListRecordResponse,
 } from "../purchase.interface";
+import RadioFilter from "../../../core/components/filters/RadioFilter";
+import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 
 type Props = {
   data: PurchaseListRecordResponse;
-  onTableChange: (pagination: PaginationProps) => void;
+  onTableChange: (
+    pagination: PaginationProps,
+    sorter: SorterInfo | SorterInfo[],
+    filters: Partial<Record<keyof PurchaseListRecord, string[]>>
+  ) => void;
   onPuchaseDetailOpen: (uuid: string) => void;
+  projectOptions?: Array<string>;
+  storeOptions?: Array<string>;
 };
 
-const PurchaseTable = ({ data, onTableChange, onPuchaseDetailOpen }: Props) => {
-  const columns = useRef([
+const PurchaseTable = ({
+  data,
+  onTableChange,
+  onPuchaseDetailOpen,
+  projectOptions,
+  storeOptions,
+}: Props) => {
+  const columns = [
     {
       key: "purchase_date",
       title: "Purchase Date",
       dataIndex: "purchase_date",
     },
     {
-      key: "name",
+      key: "project_name",
       title: "Project Name",
       dataIndex: "project_name",
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ setFilterKeys, filterKeys, confirm }: any) => {
+        return (
+          <RadioFilter
+            options={projectOptions ?? []}
+            setFilterKeys={setFilterKeys}
+            filterKeys={filterKeys}
+            confirm={confirm}
+          />
+        );
+      },
     },
     {
       key: "store_name",
       title: "Store Name",
       dataIndex: "store_name",
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ setFilterKeys, filterKeys, confirm }: any) => {
+        return (
+          <RadioFilter
+            options={storeOptions ?? []}
+            setFilterKeys={setFilterKeys}
+            filterKeys={filterKeys}
+            confirm={confirm}
+          />
+        );
+      },
     },
     {
       key: "total_price",
@@ -51,7 +87,8 @@ const PurchaseTable = ({ data, onTableChange, onPuchaseDetailOpen }: Props) => {
         );
       },
     },
-  ]);
+  ];
+
   const [pagination, setPagination] = useState<PaginationProps>({
     sizeCanChange: true,
     showTotal: true,
@@ -71,14 +108,18 @@ const PurchaseTable = ({ data, onTableChange, onPuchaseDetailOpen }: Props) => {
     });
   }, [data]);
 
-  const handleTableChange = (pagination: PaginationProps) => {
-    onTableChange(pagination);
+  const handleTableChange = (
+    pagination: PaginationProps,
+    sorter: SorterInfo | SorterInfo[],
+    filters: Partial<Record<keyof PurchaseListRecord, string[]>>
+  ) => {
+    onTableChange(pagination, sorter, filters);
   };
 
   return (
     <Table
       rowKey="uuid"
-      columns={columns.current}
+      columns={columns}
       onChange={handleTableChange}
       pagination={pagination}
       data={data.content}

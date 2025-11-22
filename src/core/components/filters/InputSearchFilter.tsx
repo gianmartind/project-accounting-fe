@@ -1,12 +1,11 @@
 import { Input } from "@arco-design/web-react";
+import type { BaseFilterProps } from "./filter.interface";
 
-type Props = {
-  filterKeys: string[];
-  setFilterKeys: (keys: string[]) => void;
-  confirm: () => void;
-};
-
-const InputSearchFilter = ({ filterKeys, setFilterKeys, confirm }: Props) => {
+const InputSearchFilter = ({
+  filterKeys,
+  setFilterKeys,
+  confirm,
+}: BaseFilterProps) => {
   return (
     <div
       style={{
@@ -18,12 +17,12 @@ const InputSearchFilter = ({ filterKeys, setFilterKeys, confirm }: Props) => {
       <Input.Search
         searchButton
         placeholder="Please enter"
-        value={filterKeys[0] || ""}
+        value={filterKeys ? filterKeys[0] : ""}
         onChange={(value) => {
-          setFilterKeys(value ? [value] : []);
+          if (setFilterKeys) setFilterKeys(value ? [value] : []);
         }}
         onSearch={() => {
-          confirm();
+          if (confirm) confirm();
         }}
       />
     </div>

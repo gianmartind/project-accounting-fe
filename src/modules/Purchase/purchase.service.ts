@@ -1,6 +1,7 @@
 import { http } from "../../core/http";
 import { PURCHASE_API_ENDPOINTS } from "./purchase.api";
 import type {
+  AvailableFilterOptions,
   PurchaseDetail,
   PurchaseListRecordRequest,
   PurchaseListRecordResponse,
@@ -46,12 +47,21 @@ const usePurchaseService = () => {
     return Promise.resolve(response.data as PurchaseDetail);
   };
 
+  const fetchAvailableFilterOptions =
+    async (): Promise<AvailableFilterOptions> => {
+      const response = await http.get(
+        `${PURCHASE_API_ENDPOINTS.AVAILABLE_FILTER_OPTIONS}`
+      );
+      return Promise.resolve(response.data as AvailableFilterOptions);
+    };
+
   return {
     fetchPurchaseRecord,
     insertPurchase,
     updatePurchase,
     fetchItemTypes,
     fetchPurchaseDetail,
+    fetchAvailableFilterOptions,
   };
 };
 

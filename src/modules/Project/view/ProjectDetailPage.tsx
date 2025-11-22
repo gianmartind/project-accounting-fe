@@ -82,7 +82,6 @@ const ProjectDetailPage = () => {
     navigate(`/purchase/detail/${uuid}`);
   };
   const handleAddNewPurchase = () => {
-    console.log(uuid)
     navigate(`/purchase/new/${uuid}`);
   };
   return (
@@ -97,8 +96,17 @@ const ProjectDetailPage = () => {
         />
       </Space>
       <Space direction="vertical">
-        <Typography.Title heading={5}>Pembelian Proyek</Typography.Title>
-        <Space style={{ width: "100%" }} direction="vertical" align="end">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography.Title heading={5} style={{ flex: 1 }}>
+            Pembelian Proyek
+          </Typography.Title>
           <Button
             type="primary"
             icon={<IconPlus />}
@@ -106,7 +114,7 @@ const ProjectDetailPage = () => {
           >
             Tambah Pembelian
           </Button>
-        </Space>
+        </div>
         <PurchaseTable
           onPuchaseDetailOpen={handleOpenPurchaseDetail}
           data={purchaseList}

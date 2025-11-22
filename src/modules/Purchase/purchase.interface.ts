@@ -49,3 +49,8 @@ export interface PurchaseListRecordRequest {
   page: number;
   size: number;
 }
+
+export interface AvailableFilterOptions {
+  project_options: string[];
+  store_options: string[];
+}
