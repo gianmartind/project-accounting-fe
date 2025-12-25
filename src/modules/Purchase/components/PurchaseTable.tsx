@@ -5,8 +5,8 @@ import type {
   PurchaseListRecord,
   PurchaseListRecordResponse,
 } from "../purchase.interface";
-import RadioFilter from "../../../core/components/filters/RadioFilter";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
+import InputSearchFilter from "../../../core/components/filters/InputSearchFilter";
 
 type Props = {
   data: PurchaseListRecordResponse;
@@ -40,8 +40,7 @@ const PurchaseTable = ({
       filterIcon: <IconSearch />,
       filterDropdown: ({ setFilterKeys, filterKeys, confirm }: any) => {
         return (
-          <RadioFilter
-            options={projectOptions ?? []}
+          <InputSearchFilter
             setFilterKeys={setFilterKeys}
             filterKeys={filterKeys}
             confirm={confirm}
@@ -56,8 +55,7 @@ const PurchaseTable = ({
       filterIcon: <IconSearch />,
       filterDropdown: ({ setFilterKeys, filterKeys, confirm }: any) => {
         return (
-          <RadioFilter
-            options={storeOptions ?? []}
+          <InputSearchFilter
             setFilterKeys={setFilterKeys}
             filterKeys={filterKeys}
             confirm={confirm}

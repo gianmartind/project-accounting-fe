@@ -17,15 +17,16 @@ const PurchaseDetailPage = () => {
     fetchPurchaseDetail(uuid ?? "").then((response) => {
       setOriginalPurchaseDetail(response);
     });
-  }, [uuid]);
+  }, [fetchPurchaseDetail, uuid]);
 
   const [form] = Form.useForm<PurchaseDetail>();
   useEffect(() => {
     form.setFieldsValue({ ...originalPurchaseDetail });
-  }, [originalPurchaseDetail]);
+  }, [form, originalPurchaseDetail]);
   const [formIsValid, setFormIsValid] = useState<boolean>(false);
 
   const validateForm = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { uuid, ...originalProjectValue } =
       originalPurchaseDetail as PurchaseDetail;
     setFormIsValid(
@@ -45,7 +46,7 @@ const PurchaseDetailPage = () => {
       success(NOTIFICATION_MESSAGE.SAVE_SUCCESS);
       setOriginalPurchaseDetail(response);
     } catch (err) {
-      form.setFieldsValue({ ...originalPurchaseDetail });
+      console.log(err)
       failed(NOTIFICATION_MESSAGE.SAVE_FAILED);
     }
   };

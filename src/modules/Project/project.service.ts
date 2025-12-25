@@ -1,41 +1,50 @@
 import type { ProjectDetail, ProjectSimpleResponse } from "./project.interface";
 import { PROJECT_API_ENDPOINTS } from "./project.api";
 import { http } from "../../core/http";
+import { useCallback } from "react";
 
 const useProjectService = () => {
-  const fetchProjects = async (
-    page: number,
-    size: number
-  ): Promise<ProjectSimpleResponse> => {
-    const response = await http.get(PROJECT_API_ENDPOINTS.LIST, {
-      params: {
-        page: page,
-        size: size,
-      },
-    });
-    return Promise.resolve(response.data as ProjectSimpleResponse);
-  };
+  const fetchProjects = useCallback(
+    async (page: number, size: number): Promise<ProjectSimpleResponse> => {
+      const response = await http.get(PROJECT_API_ENDPOINTS.LIST, {
+        params: {
+          page: page,
+          size: size,
+        },
+      });
+      return Promise.resolve(response.data as ProjectSimpleResponse);
+    },
+    []
+  );
 
-  const getProjectDetail = async (uuid: string): Promise<ProjectDetail> => {
-    const response = await http.get(`${PROJECT_API_ENDPOINTS.DETAIL}/${uuid}`);
-    return Promise.resolve(response.data as ProjectDetail);
-  };
+  const getProjectDetail = useCallback(
+    async (uuid: string): Promise<ProjectDetail> => {
+      const response = await http.get(
+        `${PROJECT_API_ENDPOINTS.DETAIL}/${uuid}`
+      );
+      return Promise.resolve(response.data as ProjectDetail);
+    },
+    []
+  );
 
-  const updateProject = async (
-    uuid: string,
-    body: ProjectDetail
-  ): Promise<ProjectDetail> => {
-    const response = await http.post(
-      `${PROJECT_API_ENDPOINTS.UPDATE}/${uuid}`,
-      body
-    );
-    return Promise.resolve(response.data as ProjectDetail);
-  };
+  const updateProject = useCallback(
+    async (uuid: string, body: ProjectDetail): Promise<ProjectDetail> => {
+      const response = await http.post(
+        `${PROJECT_API_ENDPOINTS.UPDATE}/${uuid}`,
+        body
+      );
+      return Promise.resolve(response.data as ProjectDetail);
+    },
+    []
+  );
 
-  const insertProject = async (body: ProjectDetail) => {
-    const response = await http.post(`${PROJECT_API_ENDPOINTS.INSERT}`, body);
-    return Promise.resolve(response.data as ProjectDetail);
-  };
+  const insertProject = useCallback(
+    async (body: ProjectDetail) => {
+      const response = await http.post(`${PROJECT_API_ENDPOINTS.INSERT}`, body);
+      return Promise.resolve(response.data as ProjectDetail);
+    },
+    []
+  );
 
   return { fetchProjects, getProjectDetail, updateProject, insertProject };
 };

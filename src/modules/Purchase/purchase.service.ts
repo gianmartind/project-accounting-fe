@@ -1,5 +1,6 @@
 import { http } from "../../core/http";
 import { PURCHASE_API_ENDPOINTS } from "./purchase.api";
+import { useCallback } from "react";
 import type {
   AvailableFilterOptions,
   PurchaseDetail,
@@ -8,58 +9,61 @@ import type {
 } from "./purchase.interface";
 
 const usePurchaseService = () => {
-  const fetchPurchaseRecord = async (
-    param: PurchaseListRecordRequest
-  ): Promise<PurchaseListRecordResponse> => {
-    const response = await http.get(PURCHASE_API_ENDPOINTS.LIST, {
-      params: param,
-    });
-    return Promise.resolve(response.data as PurchaseListRecordResponse);
-  };
+  const fetchPurchaseRecord = useCallback(
+    async (
+      param: PurchaseListRecordRequest
+    ): Promise<PurchaseListRecordResponse> => {
+      const response = await http.get(PURCHASE_API_ENDPOINTS.LIST, {
+        params: param,
+      });
+      return Promise.resolve(response.data as PurchaseListRecordResponse);
+    },
+    []
+  );
 
-  const insertPurchase = async (
-    body: PurchaseDetail
-  ): Promise<PurchaseDetail> => {
-    const response = await http.post(`${PURCHASE_API_ENDPOINTS.INSERT}`, body);
-    return Promise.resolve(response.data as PurchaseDetail);
-  };
+  const insertPurchase = useCallback(
+    async (body: PurchaseDetail): Promise<PurchaseDetail> => {
+      const response = await http.post(`${PURCHASE_API_ENDPOINTS.INSERT}`, body);
+      return Promise.resolve(response.data as PurchaseDetail);
+    },
+    []
+  );
 
-  const updatePurchase = async (
-    uuid: string,
-    body: PurchaseDetail
-  ): Promise<PurchaseDetail> => {
-    const response = await http.post(
-      `${PURCHASE_API_ENDPOINTS.UPDATE}/${uuid}`,
-      body
-    );
-    return Promise.resolve(response.data as PurchaseDetail);
-  };
+  const updatePurchase = useCallback(
+    async (uuid: string, body: PurchaseDetail): Promise<PurchaseDetail> => {
+      const response = await http.post(
+        `${PURCHASE_API_ENDPOINTS.UPDATE}/${uuid}`,
+        body
+      );
+      return Promise.resolve(response.data as PurchaseDetail);
+    },
+    []
+  );
 
-  const fetchItemTypes = async (): Promise<string[]> => {
-    const response = await http.get(
-      `${PURCHASE_API_ENDPOINTS.LIST_ITEM_TYPES}`
-    );
-    return Promise.resolve(response.data as string[]);
-  };
+  const fetchPurchaseDetail = useCallback(
+    async (uuid: string): Promise<PurchaseDetail> => {
+      const response = await http.get(
+        `${PURCHASE_API_ENDPOINTS.DETAIL}/${uuid}`
+      );
+      return Promise.resolve(response.data as PurchaseDetail);
+    },
+    []
+  );
 
-  const fetchPurchaseDetail = async (uuid: string): Promise<PurchaseDetail> => {
-    const response = await http.get(`${PURCHASE_API_ENDPOINTS.DETAIL}/${uuid}`);
-    return Promise.resolve(response.data as PurchaseDetail);
-  };
-
-  const fetchAvailableFilterOptions =
+  const fetchAvailableFilterOptions = useCallback(
     async (): Promise<AvailableFilterOptions> => {
       const response = await http.get(
         `${PURCHASE_API_ENDPOINTS.AVAILABLE_FILTER_OPTIONS}`
       );
       return Promise.resolve(response.data as AvailableFilterOptions);
-    };
+    },
+    []
+  );
 
   return {
     fetchPurchaseRecord,
     insertPurchase,
     updatePurchase,
-    fetchItemTypes,
     fetchPurchaseDetail,
     fetchAvailableFilterOptions,
   };

@@ -12,7 +12,9 @@ export interface PurchaseItem {
   name?: string;
   type?: string;
   amount?: number;
-  unit?: Unit;
+  unit?: string;
+  brand?: string;
+  category?: string;
   price?: number;
   purchase_uuid: string;
 }
@@ -32,13 +34,6 @@ export interface PurchaseListRecord {
   purchase_date: string;
   total_price: number;
 }
-
-export const UNIT = {
-  PC: "BUAH",
-  KG: "KILO",
-  GRAM: "GRAM",
-};
-type Unit = (typeof UNIT)[keyof typeof UNIT];
 
 export interface PurchaseListRecordRequest {
   store_name?: string;

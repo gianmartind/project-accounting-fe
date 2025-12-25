@@ -16,6 +16,7 @@ const InputSearchFilter = ({
     >
       <Input.Search
         searchButton
+        allowClear
         placeholder="Please enter"
         value={filterKeys ? filterKeys[0] : ""}
         onChange={(value) => {

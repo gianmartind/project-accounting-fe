@@ -5,6 +5,7 @@ import useNotification from "../../../core/notification.services";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
 import PurchaseForm from "../components/PurchaseForm";
 import { useParams } from "react-router";
+import { useCallback } from "react";
 
 const PurchaseNewPage = () => {
   const { projectUuid } = useParams();
@@ -14,21 +15,21 @@ const PurchaseNewPage = () => {
 
   const [form] = Form.useForm<PurchaseDetail>();
 
-  const handlePreAssignProject = () => {
-    console.log('before', form.getFieldsValue())
+  const handlePreAssignProject = useCallback(() => {
+    console.log('handlePreAssignProject', projectUuid);
     if (!projectUuid) return;
     form.setFieldValue("project_uuid", projectUuid);
-    console.log('after', form.getFieldsValue())
-  }
+  }, [form, projectUuid]);
 
   const handleSave = async () => {
     try {
       await form.validate();
-      const response = await insertPurchase(
+      await insertPurchase(
         form.getFieldsValue() as PurchaseDetail
       );
       success(NOTIFICATION_MESSAGE.SAVE_SUCCESS);
     } catch (err) {
+      console.log(err)
       failed(NOTIFICATION_MESSAGE.SAVE_FAILED);
     }
   };
