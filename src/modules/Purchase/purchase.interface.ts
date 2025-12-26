@@ -35,14 +35,22 @@ export interface PurchaseListRecord {
   total_price: number;
 }
 
+export interface PurchaseListRecordFilter {
+  store_name?: string;
+  project_name?: string;
+  purchase_date?: string[];
+}
+
 export interface PurchaseListRecordRequest {
   store_name?: string;
   store_uuid?: string;
   project_name?: string;
   project_uuid?: string;
-  purchase_date?: string;
+  purchase_date_from?: string;
+  purchase_date_to?: string;
   page: number;
   size: number;
+  sort?: string;
 }
 
 export interface AvailableFilterOptions {

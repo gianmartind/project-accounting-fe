@@ -3,7 +3,7 @@ import { IconPlus } from "@arco-design/web-react/icon";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type {
-  PurchaseListRecord,
+  PurchaseListRecordFilter,
   PurchaseListRecordRequest,
   PurchaseListRecordResponse,
 } from "../purchase.interface";
@@ -27,14 +27,25 @@ const PurchasePage = () => {
 
   const handleTableChange = (
     pagination: PaginationProps,
-    _: SorterInfo | SorterInfo[],
-    filters: Partial<Record<keyof PurchaseListRecord, string[]>>
+    sorter: SorterInfo | SorterInfo[],
+    filters: Partial<Record<keyof PurchaseListRecordFilter, string[]>>
   ) => {
+    const sort =
+      !Array.isArray(sorter) && sorter.direction
+        ? `${sorter.field}:${sorter.direction}`
+        : undefined;
     const param: PurchaseListRecordRequest = {
       page: (pagination.current ?? 1) - 1,
       size: pagination.pageSize ?? 10,
+      sort: sort,
       project_name: filters.project_name ? filters.project_name[0] : undefined,
       store_name: filters.store_name ? filters.store_name[0] : undefined,
+      purchase_date_from: filters.purchase_date
+        ? filters.purchase_date[0]
+        : undefined,
+      purchase_date_to: filters.purchase_date
+        ? filters.purchase_date[1]
+        : undefined,
     };
     getPurchaseRecordData(param);
   };
@@ -51,7 +62,7 @@ const PurchasePage = () => {
     };
     fetchAvailableFilterOptions()
       .then((options) => {
-        console.log(options)
+        console.log(options);
         setProjectOptions(options.project_options);
         setStoreOptions(options.store_options);
       })

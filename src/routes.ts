@@ -1,6 +1,7 @@
 import {
   IconBook,
   IconHome,
+  IconStorage,
   type IconProps,
 } from "@arco-design/web-react/icon";
 import ProjectPage from "./modules/Project/view/ProjectPage";
@@ -9,6 +10,7 @@ import ProjectDetailPage from "./modules/Project/view/ProjectDetailPage";
 import ProjectNewPage from "./modules/Project/view/ProjectNewPage";
 import PurchaseNewPage from "./modules/Purchase/view/PurchaseNewPage";
 import PurchaseDetailPage from "./modules/Purchase/view/PuchaseDetailPage";
+import PurchaseItemPage from "./modules/purchase_item/view/PurchaseItemPage";
 
 export type RouteItem = {
   path: string;
@@ -55,4 +57,11 @@ export const routes: RouteItem[] = [
     title: "Pembelian",
     component: PurchaseNewPage,
   },
+  {
+    path: "/puchase-item",
+    title: "Item Pembelian",
+    icon: IconStorage,
+    component: PurchaseItemPage,
+    sidebarMenu: true,
+  }
 ];

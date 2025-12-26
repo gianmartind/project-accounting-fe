@@ -1,16 +1,13 @@
-import type { ProjectDetail, ProjectSimpleResponse } from "./project.interface";
+import type { ProjectDetail, ProjectListRecordRequest, ProjectSimpleResponse } from "./project.interface";
 import { PROJECT_API_ENDPOINTS } from "./project.api";
 import { http } from "../../core/http";
 import { useCallback } from "react";
 
 const useProjectService = () => {
   const fetchProjects = useCallback(
-    async (page: number, size: number): Promise<ProjectSimpleResponse> => {
+    async (param: ProjectListRecordRequest): Promise<ProjectSimpleResponse> => {
       const response = await http.get(PROJECT_API_ENDPOINTS.LIST, {
-        params: {
-          page: page,
-          size: size,
-        },
+        params: param,
       });
       return Promise.resolve(response.data as ProjectSimpleResponse);
     },

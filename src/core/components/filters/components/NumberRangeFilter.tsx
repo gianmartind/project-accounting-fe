@@ -1,16 +1,11 @@
-import { Button, Radio, Space } from "@arco-design/web-react";
-import type { BaseFilterProps } from "./filter.interface";
+import { Button, InputNumber, Space } from "@arco-design/web-react";
+import type { BaseFilterProps } from "../interface/filter.interface";
 
-type RadioFilterProps = BaseFilterProps & {
-  options: string[];
-};
-
-const RadioFilter = ({
-  options,
+const NumberRangeFilter = ({
   filterKeys,
   setFilterKeys,
   confirm,
-}: RadioFilterProps) => {
+}: BaseFilterProps) => {
   return (
     <Space
       direction="vertical"
@@ -27,19 +22,25 @@ const RadioFilter = ({
           overflowY: "auto",
         }}
       >
-        <Radio.Group
-          value={filterKeys ? filterKeys[0] : ""}
-          direction="vertical"
-          onChange={(value) => {
-            if (setFilterKeys) setFilterKeys(value ? [value] : []);
-          }}
-        >
-          {(options as string[]).map((name) => (
-            <Radio key={name} value={name}>
-              {name}
-            </Radio>
-          ))}
-        </Radio.Group>
+        <Space direction="horizontal" style={{ width: "100%" }}>
+          <InputNumber
+            placeholder="Min"
+            value={filterKeys ? filterKeys[0] : ""}
+            onChange={(value) => {
+              if (setFilterKeys && filterKeys)
+                setFilterKeys(value ? [String(value), filterKeys[1]] : []);
+            }}
+          />
+          -
+          <InputNumber
+            placeholder="Max"
+            value={filterKeys ? filterKeys[1] : ""}
+            onChange={(value) => {
+              if (setFilterKeys && filterKeys)
+                setFilterKeys(value ? [filterKeys[0], String(value)] : []);
+            }}
+          />
+        </Space>
       </div>
       <div
         style={{
@@ -73,4 +74,4 @@ const RadioFilter = ({
   );
 };
 
-export default RadioFilter;
+export default NumberRangeFilter;

@@ -133,7 +133,7 @@ const PurchaseForm = ({
             return (
               <div>
                 <div style={{ marginBottom: "2vh" }}>
-                  <Grid.Row gutter={1}>
+                  <Grid.Row gutter={2}>
                     <Grid.Col span={3}>
                       <div style={centeredTextStyle}>Nama</div>
                     </Grid.Col>
@@ -171,7 +171,7 @@ const PurchaseForm = ({
                   return (
                     <div key={item.key}>
                       <Form.Item style={{ marginBottom: "1vh" }}>
-                        <Grid.Row gutter={1}>
+                        <Grid.Row gutter={2}>
                           <Grid.Col span={3}>
                             <div style={centeredTextStyle}>
                               <Form.Item

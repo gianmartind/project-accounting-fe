@@ -1,12 +1,15 @@
 import { Button, Table, type PaginationProps } from "@arco-design/web-react";
-import { IconExpand, IconSearch } from "@arco-design/web-react/icon";
+import { IconCalendar, IconExpand, IconFilter, IconSearch } from "@arco-design/web-react/icon";
 import { useEffect, useState } from "react";
 import type {
   PurchaseListRecord,
   PurchaseListRecordResponse,
 } from "../purchase.interface";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
-import InputSearchFilter from "../../../core/components/filters/InputSearchFilter";
+import InputSearchFilter from "../../../core/components/filters/components/InputSearchFilter";
+import type { FilterDropdownProps } from "../../../core/components/filters/interface/filter.interface";
+import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
+import NumberRangeFilter from "../../../core/components/filters/components/NumberRangeFilter";
 
 type Props = {
   data: PurchaseListRecordResponse;
@@ -24,21 +27,39 @@ const PurchaseTable = ({
   data,
   onTableChange,
   onPuchaseDetailOpen,
-  projectOptions,
-  storeOptions,
 }: Props) => {
   const columns = [
     {
       key: "purchase_date",
       title: "Purchase Date",
       dataIndex: "purchase_date",
+      sorter: true,
+      filterIcon: <IconCalendar />,
+      filterDropdown: ({
+        setFilterKeys,
+        filterKeys,
+        confirm,
+      }: FilterDropdownProps) => {
+        return (
+          <DateRangeFilter
+            setFilterKeys={setFilterKeys}
+            filterKeys={filterKeys}
+            confirm={confirm}
+          />
+        );
+      },
     },
     {
       key: "project_name",
       title: "Project Name",
       dataIndex: "project_name",
+      sorter: true,
       filterIcon: <IconSearch />,
-      filterDropdown: ({ setFilterKeys, filterKeys, confirm }: any) => {
+      filterDropdown: ({
+        setFilterKeys,
+        filterKeys,
+        confirm,
+      }: FilterDropdownProps) => {
         return (
           <InputSearchFilter
             setFilterKeys={setFilterKeys}
@@ -52,8 +73,13 @@ const PurchaseTable = ({
       key: "store_name",
       title: "Store Name",
       dataIndex: "store_name",
+      sorter: true,
       filterIcon: <IconSearch />,
-      filterDropdown: ({ setFilterKeys, filterKeys, confirm }: any) => {
+      filterDropdown: ({
+        setFilterKeys,
+        filterKeys,
+        confirm,
+      }: FilterDropdownProps) => {
         return (
           <InputSearchFilter
             setFilterKeys={setFilterKeys}
@@ -67,10 +93,24 @@ const PurchaseTable = ({
       key: "total_price",
       title: "Total Price",
       dataIndex: "total_price",
+      filterIcon: <IconFilter />,
+      filterDropdown: ({
+        setFilterKeys,
+        filterKeys,
+        confirm,
+      }: FilterDropdownProps) => {
+        return (
+          <NumberRangeFilter
+            setFilterKeys={setFilterKeys}
+            filterKeys={filterKeys}
+            confirm={confirm}
+          />
+        );
+      },
     },
     {
       key: "action",
-      title: "Action",
+      title: "",
       dataIndex: "action",
       width: 1,
       render: (_: unknown, record: PurchaseListRecord) => {

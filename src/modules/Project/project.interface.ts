@@ -17,3 +17,20 @@ export interface ProjectDetail extends ProjectSimple {
   address: string;
   notes: string;
 }
+
+export interface ProjectListRecordRequest {
+  name?: string;
+  start_date_from?: string;
+  start_date_to?: string;
+  end_date_from?: string;
+  end_date_to?: string;
+  page: number;
+  size: number;
+  sort?: string;
+}
+
+export interface ProjectListRecordFilter {
+  name?: string;
+  start_date?: [string, string];
+  end_date?: [string, string];
+}
