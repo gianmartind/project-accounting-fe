@@ -23,6 +23,7 @@ const ProjectNewPage = () => {
       success(NOTIFICATION_MESSAGE.SAVE_SUCCESS);
       navigate(`/project/detail/${response.uuid}`)
     } catch (err) {
+      console.log(err)
       failed(NOTIFICATION_MESSAGE.SAVE_FAILED);
     }
   };

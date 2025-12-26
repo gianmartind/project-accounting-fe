@@ -1,6 +1,6 @@
 import { Space, Button, type PaginationProps } from "@arco-design/web-react";
 import { IconPlus } from "@arco-design/web-react/icon";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type {
   PurchaseListRecordFilter,
@@ -50,10 +50,10 @@ const PurchasePage = () => {
     getPurchaseRecordData(param);
   };
 
-  const getPurchaseRecordData = async (param: PurchaseListRecordRequest) => {
+  const getPurchaseRecordData = useCallback(async (param: PurchaseListRecordRequest) => {
     const response = await fetchPurchaseRecord(param);
     setPurchaseList(response);
-  };
+  }, [fetchPurchaseRecord]);
 
   useEffect(() => {
     const param: PurchaseListRecordRequest = {
@@ -69,7 +69,7 @@ const PurchasePage = () => {
       .then(() => {
         getPurchaseRecordData(param);
       });
-  }, []);
+  }, [getPurchaseRecordData, fetchAvailableFilterOptions]);
 
   const navigate = useNavigate();
 

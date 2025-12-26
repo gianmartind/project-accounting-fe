@@ -16,7 +16,6 @@ const PurchaseNewPage = () => {
   const [form] = Form.useForm<PurchaseDetail>();
 
   const handlePreAssignProject = useCallback(() => {
-    console.log('handlePreAssignProject', projectUuid);
     if (!projectUuid) return;
     form.setFieldValue("project_uuid", projectUuid);
   }, [form, projectUuid]);

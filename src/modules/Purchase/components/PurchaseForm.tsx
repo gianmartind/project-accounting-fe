@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import useProjectService from "../../Project/project.service";
 import useStoreService from "../../store/store.service";
 import usePurchaseItemService from "../../purchase_item/purchase-item.service";
+import type { ProjectListRecordRequest } from "../../Project/project.interface";
 
 type Props = {
   form: FormInstance<PurchaseDetail>;
@@ -63,7 +64,11 @@ const PurchaseForm = ({
     setSaveLoading(false);
   };
   useEffect(() => {
-    fetchProjects(0, 9999).then((response) => {
+    const param: ProjectListRecordRequest = {
+      page: 0,
+      size: 9999,
+    }
+    fetchProjects(param).then((response) => {
       const optionList = response.content.map((item) => {
         return {
           label: item.name,

@@ -1,5 +1,5 @@
 import { Space, type PaginationProps } from "@arco-design/web-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import usePurchaseItemService from "../purchase-item.service";
 import PurchaseItemTable from "../components/PurchaseItemTable";
@@ -41,9 +41,7 @@ const PurchaseItemPage = () => {
       category: filters.category ? filters.category[0] : undefined,
       unit: filters.unit ? filters.unit[0] : undefined,
       store_name: filters.store_name ? filters.store_name[0] : undefined,
-      store_uuid: filters.store_uuid ? filters.store_uuid[0] : undefined,
       project_name: filters.project_name ? filters.project_name[0] : undefined,
-      project_uuid: filters.project_uuid ? filters.project_uuid[0] : undefined,
       purchase_date_from: filters.purchase_date
         ? filters.purchase_date[0]
         : undefined,
@@ -64,12 +62,13 @@ const PurchaseItemPage = () => {
     getPurchaseItemRecordData(param);
   };
 
-  const getPurchaseItemRecordData = async (
-    param: PurchaseItemListRecordRequest
-  ) => {
-    const response = await fetchPurchaseItemRecord(param);
-    setPurchaseItemList(response);
-  };
+  const getPurchaseItemRecordData = useCallback(
+    async (param: PurchaseItemListRecordRequest) => {
+      const response = await fetchPurchaseItemRecord(param);
+      setPurchaseItemList(response);
+    },
+    [fetchPurchaseItemRecord]
+  );
 
   useEffect(() => {
     const param: PurchaseItemListRecordRequest = {
@@ -77,7 +76,7 @@ const PurchaseItemPage = () => {
       size: 10,
     };
     getPurchaseItemRecordData(param);
-  }, []);
+  }, [getPurchaseItemRecordData]);
 
   const navigate = useNavigate();
 

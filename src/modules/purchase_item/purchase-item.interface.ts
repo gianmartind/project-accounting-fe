@@ -33,9 +33,7 @@ export interface PurchaseItemListRecordFilter {
   price?: number[];
   total_price?: number[];
   store_name?: string;
-  store_uuid?: string;
   project_name?: string;
-  project_uuid?: string;
   purchase_date?: string[];
 }
 

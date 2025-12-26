@@ -1,7 +1,7 @@
 import "./App.css";
 import "@arco-design/web-react/dist/css/arco.css";
 import { routes } from "./routes";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import AppLayout from "./AppLayout";
 
 function App() {
@@ -9,12 +9,18 @@ function App() {
     {
       path: "/",
       element: <AppLayout />,
-      children: routes.map((item) => {
-        return {
-          path: item.path,
-          element: <item.component />,
-        };
-      }),
+      children: [
+        {
+          index: true,
+          element: <Navigate to="/project" replace />,
+        },
+        ...routes.map((item) => {
+          return {
+            path: item.path,
+            element: <item.component />,
+          };
+        }),
+      ],
     },
   ]);
 
