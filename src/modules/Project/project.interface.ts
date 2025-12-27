@@ -24,6 +24,7 @@ export interface ProjectListRecordRequest {
   start_date_to?: string;
   end_date_from?: string;
   end_date_to?: string;
+  status?: "COMPLETED" | "ONGOING";
   page: number;
   size: number;
   sort?: string;
@@ -33,4 +34,5 @@ export interface ProjectListRecordFilter {
   name?: string;
   start_date?: [string, string];
   end_date?: [string, string];
+  status?: "COMPLETED" | "ONGOING";
 }

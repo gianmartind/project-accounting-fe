@@ -15,6 +15,7 @@ import useProjectService from "../project.service";
 import {
   IconCalendar,
   IconExpand,
+  IconList,
   IconPlus,
   IconSearch,
 } from "@arco-design/web-react/icon";
@@ -23,6 +24,7 @@ import type { FilterDropdownProps } from "../../../core/components/filters/inter
 import InputSearchFilter from "../../../core/components/filters/components/InputSearchFilter";
 import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
+import RadioFilter from "../../../core/components/filters/components/RadioFilter";
 
 const ProjectPage = () => {
   const columns = useRef([
@@ -70,7 +72,7 @@ const ProjectPage = () => {
     },
     {
       key: "start_date",
-      title: "Tanggal Mulai",
+      title: "Mulai",
       dataIndex: "start_date",
       width: 100,
       sorter: true,
@@ -91,10 +93,13 @@ const ProjectPage = () => {
     },
     {
       key: "end_date",
-      title: "Tanggal Selesai",
+      title: "Selesai",
       dataIndex: "end_date",
       width: 100,
       sorter: true,
+      render: (_: unknown, record: ProjectSimple) => {
+        return record.end_date ?? "-";
+      },
       filterIcon: <IconCalendar />,
       filterDropdown: ({
         setFilterKeys,
@@ -106,6 +111,30 @@ const ProjectPage = () => {
             setFilterKeys={setFilterKeys}
             filterKeys={filterKeys}
             confirm={confirm}
+          />
+        );
+      },
+    },
+    {
+      key: "status",
+      title: "Status",
+      dataIndex: "status",
+      width: 100,
+      render: (_: unknown, record: ProjectSimple) => {
+        return record.end_date ? "COMPLETED" : "ONGOING";
+      },
+      filterIcon: <IconList />,
+      filterDropdown: ({
+        setFilterKeys,
+        filterKeys,
+        confirm,
+      }: FilterDropdownProps) => {
+        return (
+          <RadioFilter
+            setFilterKeys={setFilterKeys}
+            filterKeys={filterKeys}
+            confirm={confirm}
+            options={["ONGOING", "COMPLETED"]}
           />
         );
       },
@@ -198,6 +227,7 @@ const ProjectPage = () => {
       start_date_to: filters.start_date ? filters.start_date[1] : undefined,
       end_date_from: filters.end_date ? filters.end_date[0] : undefined,
       end_date_to: filters.end_date ? filters.end_date[1] : undefined,
+      status: filters.status ? (filters.status[0] as "COMPLETED" | "ONGOING") : undefined,
     };
     getProjectList(param);
   };

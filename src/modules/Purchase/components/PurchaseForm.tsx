@@ -172,7 +172,7 @@ const PurchaseForm = ({
                 </div>
                 {fields.map((item, index) => {
                   const itemValue = form.getFieldValue("items")[index] as PurchaseItem;
-                  const totalPrice = (itemValue.amount ?? 0) * (itemValue.price ?? 0);
+                  const totalPrice = (itemValue?.amount ?? 0) * (itemValue?.price ?? 0);
                   return (
                     <div key={item.key}>
                       <Form.Item style={{ marginBottom: "1vh" }}>
