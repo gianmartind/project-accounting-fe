@@ -25,6 +25,8 @@ import InputSearchFilter from "../../../core/components/filters/components/Input
 import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 import RadioFilter from "../../../core/components/filters/components/RadioFilter";
+import useNotification from "../../../core/notification.services";
+import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
 
 const ProjectPage = () => {
   const columns = useRef([
@@ -187,12 +189,19 @@ const ProjectPage = () => {
     number: 1,
   });
   const { fetchProjects } = useProjectService();
+  const { failed } = useNotification();
+
   const getProjectList = useCallback(
     async (param: ProjectListRecordRequest) => {
-      const response = await fetchProjects(param);
-      setProjectList(response);
+      try {
+        const response = await fetchProjects(param);
+        setProjectList(response);
+      } catch (err) {
+        console.log(err);
+        failed(NOTIFICATION_MESSAGE.FETCH_FAILED);
+      }
     },
-    [fetchProjects]
+    [failed, fetchProjects]
   );
 
   useEffect(() => {
@@ -250,7 +259,9 @@ const ProjectPage = () => {
       start_date_to: filters.start_date ? filters.start_date[1] : undefined,
       end_date_from: filters.end_date ? filters.end_date[0] : undefined,
       end_date_to: filters.end_date ? filters.end_date[1] : undefined,
-      status: filters.status ? (filters.status[0] as "COMPLETED" | "ONGOING") : undefined,
+      status: filters.status
+        ? (filters.status[0] as "COMPLETED" | "ONGOING")
+        : undefined,
     };
     getProjectList(param);
   };

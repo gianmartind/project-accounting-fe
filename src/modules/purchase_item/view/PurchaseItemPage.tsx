@@ -11,6 +11,8 @@ import type {
   PurchaseItemSummary,
 } from "../purchase-item.interface";
 import SummaryCard from "../../../core/components/SummaryCard";
+import useNotification from "../../../core/notification.services";
+import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
 
 const PurchaseItemPage = () => {
   const { fetchPurchaseItemRecord, fetchPurchaseItemSummary } =
@@ -64,16 +66,22 @@ const PurchaseItemPage = () => {
     };
     getPurchaseItemRecordData(param);
   };
+  const { failed } = useNotification();
 
   const getPurchaseItemRecordData = useCallback(
     async (param: PurchaseItemListRecordRequest) => {
-      const response = await fetchPurchaseItemRecord(param);
-      setPurchaseItemList(response);
+      try {
+        const response = await fetchPurchaseItemRecord(param);
+        setPurchaseItemList(response);
 
-      const summary = await fetchPurchaseItemSummary(param);
-      setPurchaseItemSummary(summary);
+        const summary = await fetchPurchaseItemSummary(param);
+        setPurchaseItemSummary(summary);
+      } catch (err) {
+        console.log(err);
+        failed(NOTIFICATION_MESSAGE.FETCH_FAILED);
+      }
     },
-    [fetchPurchaseItemRecord, fetchPurchaseItemSummary]
+    [failed, fetchPurchaseItemRecord, fetchPurchaseItemSummary]
   );
 
   useEffect(() => {

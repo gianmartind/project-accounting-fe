@@ -10,6 +10,8 @@ import type {
 import usePurchaseService from "../purchase.service";
 import PurchaseTable from "../components/PurchaseTable";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
+import useNotification from "../../../core/notification.services";
+import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
 
 const PurchasePage = () => {
   const { fetchPurchaseRecord } = usePurchaseService();
@@ -46,13 +48,19 @@ const PurchasePage = () => {
     };
     getPurchaseRecordData(param);
   };
+  const { failed } = useNotification();
 
   const getPurchaseRecordData = useCallback(
     async (param: PurchaseListRecordRequest) => {
-      const response = await fetchPurchaseRecord(param);
-      setPurchaseList(response);
+      try {
+        const response = await fetchPurchaseRecord(param);
+        setPurchaseList(response);
+      } catch (err) {
+        console.log(err);
+        failed(NOTIFICATION_MESSAGE.FETCH_FAILED);
+      }
     },
-    [fetchPurchaseRecord]
+    [failed, fetchPurchaseRecord]
   );
 
   useEffect(() => {
