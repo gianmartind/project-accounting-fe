@@ -19,8 +19,6 @@ type Props = {
     filters: Partial<Record<keyof PurchaseListRecord, string[]>>
   ) => void;
   onPuchaseDetailOpen: (uuid: string) => void;
-  projectOptions?: Array<string>;
-  storeOptions?: Array<string>;
 };
 
 const PurchaseTable = ({

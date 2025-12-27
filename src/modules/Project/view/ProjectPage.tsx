@@ -50,10 +50,31 @@ const ProjectPage = () => {
       },
     },
     {
-      key: "address",
-      title: "Alamat",
-      dataIndex: "address",
-      width: 250,
+      key: "owner",
+      title: "Pemilik",
+      dataIndex: "owner",
+      width: 150,
+      sorter: true,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({
+        setFilterKeys,
+        filterKeys,
+        confirm,
+      }: FilterDropdownProps) => {
+        return (
+          <InputSearchFilter
+            setFilterKeys={setFilterKeys}
+            filterKeys={filterKeys}
+            confirm={confirm}
+          />
+        );
+      },
+    },
+    {
+      key: "city",
+      title: "Kota",
+      dataIndex: "city",
+      width: 150,
       sorter: true,
       filterIcon: <IconSearch />,
       filterDropdown: ({
@@ -223,6 +244,8 @@ const ProjectPage = () => {
       size: pagination.pageSize ?? 10,
       sort: sort,
       name: filters.name ? filters.name[0] : undefined,
+      owner: filters.owner ? filters.owner[0] : undefined,
+      city: filters.city ? filters.city[0] : undefined,
       start_date_from: filters.start_date ? filters.start_date[0] : undefined,
       start_date_to: filters.start_date ? filters.start_date[1] : undefined,
       end_date_from: filters.end_date ? filters.end_date[0] : undefined,

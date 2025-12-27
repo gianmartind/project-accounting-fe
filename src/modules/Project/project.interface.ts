@@ -1,6 +1,8 @@
 export interface ProjectSimple {
   uuid: string;
   name: string;
+  owner: string;
+  city: string;
   start_date: string;
   end_date: string;
 }
@@ -20,6 +22,8 @@ export interface ProjectDetail extends ProjectSimple {
 
 export interface ProjectListRecordRequest {
   name?: string;
+  owner?: string;
+  city?: string;
   start_date_from?: string;
   start_date_to?: string;
   end_date_from?: string;
@@ -32,6 +36,8 @@ export interface ProjectListRecordRequest {
 
 export interface ProjectListRecordFilter {
   name?: string;
+  owner?: string;
+  city?: string;
   start_date?: [string, string];
   end_date?: [string, string];
   status?: "COMPLETED" | "ONGOING";

@@ -2,7 +2,6 @@ import { http } from "../../core/http";
 import { PURCHASE_API_ENDPOINTS } from "./purchase.api";
 import { useCallback } from "react";
 import type {
-  AvailableFilterOptions,
   PurchaseDetail,
   PurchaseListRecordRequest,
   PurchaseListRecordResponse,
@@ -50,22 +49,11 @@ const usePurchaseService = () => {
     []
   );
 
-  const fetchAvailableFilterOptions = useCallback(
-    async (): Promise<AvailableFilterOptions> => {
-      const response = await http.get(
-        `${PURCHASE_API_ENDPOINTS.AVAILABLE_FILTER_OPTIONS}`
-      );
-      return Promise.resolve(response.data as AvailableFilterOptions);
-    },
-    []
-  );
-
   return {
     fetchPurchaseRecord,
     insertPurchase,
     updatePurchase,
     fetchPurchaseDetail,
-    fetchAvailableFilterOptions,
   };
 };
 

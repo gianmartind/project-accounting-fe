@@ -29,6 +29,7 @@ import type {
   PurchaseItemListRecordResponse,
 } from "../../purchase_item/purchase-item.interface";
 import usePurchaseItemService from "../../purchase_item/purchase-item.service";
+import SummaryCard from "../../../core/components/SummaryCard";
 
 const ProjectDetailPage = () => {
   const { uuid } = useParams();
@@ -126,7 +127,8 @@ const ProjectDetailPage = () => {
   }, [getPurchaseRecordData, uuid]);
 
   // Variables for PurchaseItem Section
-  const { fetchPurchaseItemRecord } = usePurchaseItemService();
+  const { fetchPurchaseItemRecord, fetchTotalProjectPrice } =
+    usePurchaseItemService();
 
   const [purchaseItemList, setPurchaseItemList] =
     useState<PurchaseItemListRecordResponse>({
@@ -212,10 +214,48 @@ const ProjectDetailPage = () => {
     "purchase" | "purchase_item"
   >("purchase");
 
+  // Summary Card Data
+  const [summaryItems, setSummaryItems] = useState<
+    { title: string; value: number }[]
+  >([]);
+  const getProjectSummary = useCallback(
+    async (project_uuid: string) => {
+      const totalProjectPrice = await fetchTotalProjectPrice(project_uuid);
+      const totalPrice = {
+        title: "Total Pembelian Proyek (Rp)",
+        value: totalProjectPrice,
+      };
+
+      const totalProjectTime = calculateProjectTime(originalProjectDetail as ProjectDetail) ?? 0;
+      const totalTime = {
+        title: "Total Waktu Proyek (hari)",
+        value: totalProjectTime
+      };
+      setSummaryItems([totalTime, totalPrice]);
+    },
+    [fetchTotalProjectPrice, originalProjectDetail]
+  );
+
+  const calculateProjectTime = (project: ProjectDetail) => {
+    if (project.start_date) {
+      const startDate = new Date(project.start_date);
+      const endDate = project.end_date ? new Date(project.end_date) : new Date();
+      const timeDiff = endDate.getTime() - startDate.getTime();
+      const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      return dayDiff;
+    }
+  }
+
+  useEffect(() => {
+    if (uuid) {
+      getProjectSummary(uuid);
+    }
+  }, [getProjectSummary, uuid]);
   return (
     <Space direction="vertical" style={{ width: "100%" }}>
       <Space direction="vertical" style={{ width: "100%" }}>
         <Typography.Title heading={5}>Detail Proyek</Typography.Title>
+        <SummaryCard items={summaryItems} />
         <ProjectForm
           form={form}
           onValuesChange={validateForm}
@@ -243,7 +283,7 @@ const ProjectDetailPage = () => {
             <Radio value="purchase">Pembelian</Radio>
             <Radio value="purchase_item">Item</Radio>
           </Radio.Group>
-          <div style={{width: "1vw"}}></div>
+          <div style={{ width: "1vw" }}></div>
           <Button
             type="primary"
             icon={<IconPlus />}

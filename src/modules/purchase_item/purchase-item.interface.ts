@@ -59,3 +59,9 @@ export interface PurchaseItemListRecordRequest {
   size: number;
   sort?: string;
 }
+
+export interface PurchaseItemSummary {
+  total_price: number;
+  first_purchase_date: string;
+  last_purchase_date: string;
+}

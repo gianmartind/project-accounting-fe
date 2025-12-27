@@ -8,10 +8,13 @@ import type {
   PurchaseItemListRecordFilter,
   PurchaseItemListRecordRequest,
   PurchaseItemListRecordResponse,
+  PurchaseItemSummary,
 } from "../purchase-item.interface";
+import SummaryCard from "../../../core/components/SummaryCard";
 
 const PurchaseItemPage = () => {
-  const { fetchPurchaseItemRecord } = usePurchaseItemService();
+  const { fetchPurchaseItemRecord, fetchPurchaseItemSummary } =
+    usePurchaseItemService();
 
   const [purchaseItemList, setPurchaseItemList] =
     useState<PurchaseItemListRecordResponse>({
@@ -66,8 +69,11 @@ const PurchaseItemPage = () => {
     async (param: PurchaseItemListRecordRequest) => {
       const response = await fetchPurchaseItemRecord(param);
       setPurchaseItemList(response);
+
+      const summary = await fetchPurchaseItemSummary(param);
+      setPurchaseItemSummary(summary);
     },
-    [fetchPurchaseItemRecord]
+    [fetchPurchaseItemRecord, fetchPurchaseItemSummary]
   );
 
   useEffect(() => {
@@ -77,6 +83,30 @@ const PurchaseItemPage = () => {
     };
     getPurchaseItemRecordData(param);
   }, [getPurchaseItemRecordData]);
+
+  const [purchaseItemSummary, setPurchaseItemSummary] =
+    useState<PurchaseItemSummary>({
+      total_price: 0,
+      first_purchase_date: "",
+      last_purchase_date: "",
+    });
+
+  const purchaseItemSummaryItems = () => {
+    return [
+      {
+        title: "Pembelian Pertama",
+        value: purchaseItemSummary.first_purchase_date,
+      },
+      {
+        title: "Pembelian Terakhir",
+        value: purchaseItemSummary.last_purchase_date,
+      },
+      {
+        title: "Harga Total Pembelian",
+        value: purchaseItemSummary.total_price,
+      },
+    ];
+  };
 
   const navigate = useNavigate();
 
@@ -92,6 +122,7 @@ const PurchaseItemPage = () => {
           width: "100%",
         }}
       >
+        <SummaryCard items={purchaseItemSummaryItems()} />
         <PurchaseItemTable
           onOpenPurchase={handleOpenPurchase}
           data={purchaseItemList}

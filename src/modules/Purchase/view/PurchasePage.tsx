@@ -12,8 +12,7 @@ import PurchaseTable from "../components/PurchaseTable";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 
 const PurchasePage = () => {
-  const { fetchPurchaseRecord, fetchAvailableFilterOptions } =
-    usePurchaseService();
+  const { fetchPurchaseRecord } = usePurchaseService();
 
   const [purchaseList, setPurchaseList] = useState<PurchaseListRecordResponse>({
     content: [],
@@ -22,8 +21,6 @@ const PurchasePage = () => {
     size: 10,
     number: 1,
   });
-  const [projectOptions, setProjectOptions] = useState<Array<string>>([]);
-  const [storeOptions, setStoreOptions] = useState<Array<string>>([]);
 
   const handleTableChange = (
     pagination: PaginationProps,
@@ -50,26 +47,21 @@ const PurchasePage = () => {
     getPurchaseRecordData(param);
   };
 
-  const getPurchaseRecordData = useCallback(async (param: PurchaseListRecordRequest) => {
-    const response = await fetchPurchaseRecord(param);
-    setPurchaseList(response);
-  }, [fetchPurchaseRecord]);
+  const getPurchaseRecordData = useCallback(
+    async (param: PurchaseListRecordRequest) => {
+      const response = await fetchPurchaseRecord(param);
+      setPurchaseList(response);
+    },
+    [fetchPurchaseRecord]
+  );
 
   useEffect(() => {
     const param: PurchaseListRecordRequest = {
       page: 0,
       size: 10,
     };
-    fetchAvailableFilterOptions()
-      .then((options) => {
-        console.log(options);
-        setProjectOptions(options.project_options);
-        setStoreOptions(options.store_options);
-      })
-      .then(() => {
-        getPurchaseRecordData(param);
-      });
-  }, [getPurchaseRecordData, fetchAvailableFilterOptions]);
+    getPurchaseRecordData(param);
+  }, [getPurchaseRecordData]);
 
   const navigate = useNavigate();
 
@@ -100,8 +92,6 @@ const PurchasePage = () => {
           onPuchaseDetailOpen={handleOpenPurchaseDetail}
           data={purchaseList}
           onTableChange={handleTableChange}
-          projectOptions={projectOptions}
-          storeOptions={storeOptions}
         />
       </Space>
     </div>

@@ -40,27 +40,47 @@ const ProjectForm = ({
       <Form.Item label="Nama Proyek" field="name" rules={required.current}>
         <Input maxLength={32} showWordLimit />
       </Form.Item>
-      <Form.Item label="Alamat" field="address" rules={required.current}>
-        <Input.TextArea
-          style={{ minHeight: 64 }}
-          maxLength={255}
-          showWordLimit
-        />
+      <Form.Item label="Pemilik" field="owner" rules={required.current}>
+        <Input maxLength={32} showWordLimit />
+      </Form.Item>
+      <Form.Item label="Lokasi">
+        <Grid.Row gutter={12}>
+          <Grid.Col span={6}>
+            <Form.Item label="Kota" field="city" rules={required.current}>
+              <Input maxLength={32} showWordLimit />
+            </Form.Item>
+          </Grid.Col>
+          <Grid.Col span={18}>
+            <Form.Item label="Alamat" field="address" rules={required.current}>
+              <Input.TextArea
+                style={{ minHeight: 64 }}
+                maxLength={255}
+                showWordLimit
+              />
+            </Form.Item>
+          </Grid.Col>
+        </Grid.Row>
       </Form.Item>
       <Form.Item label="Tanggal">
-        <Grid.Row>
+        <Grid.Row gutter={12}>
           <Grid.Col span={12}>
             <Form.Item
               label="Mulai"
               field="start_date"
               rules={required.current}
             >
-              <DatePicker placeholder="Please select" />
+              <DatePicker
+                style={{ width: "100%" }}
+                placeholder="Please select"
+              />
             </Form.Item>
           </Grid.Col>
           <Grid.Col span={12}>
             <Form.Item label="Selesai" field="end_date">
-              <DatePicker placeholder="Please select" />
+              <DatePicker
+                style={{ width: "100%" }}
+                placeholder="Please select"
+              />
             </Form.Item>
           </Grid.Col>
         </Grid.Row>
