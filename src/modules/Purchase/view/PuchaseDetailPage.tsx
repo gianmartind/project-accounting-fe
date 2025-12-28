@@ -1,15 +1,18 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import usePurchaseService from "../purchase.service";
 import { useEffect, useState } from "react";
 import type { PurchaseDetail } from "../purchase.interface";
-import { Form, Space, Typography } from "@arco-design/web-react";
+import { Button, Form, Space, Typography } from "@arco-design/web-react";
 import PurchaseForm from "../components/PurchaseForm";
 import useNotification from "../../../core/notification.services";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
+import { IconDelete } from "@arco-design/web-react/icon";
+import useConfirmation from "../../../core/components/confirmation.services";
 
 const PurchaseDetailPage = () => {
   const { uuid } = useParams();
-  const { fetchPurchaseDetail, updatePurchase } = usePurchaseService();
+  const { fetchPurchaseDetail, updatePurchase, deletePurchase } =
+    usePurchaseService();
   const [originalPurchaseDetail, setOriginalPurchaseDetail] =
     useState<PurchaseDetail>();
 
@@ -46,11 +49,26 @@ const PurchaseDetailPage = () => {
       success(NOTIFICATION_MESSAGE.SAVE_SUCCESS);
       setOriginalPurchaseDetail(response);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       failed(NOTIFICATION_MESSAGE.SAVE_FAILED);
     }
   };
 
+  // Delete purchase
+  const navigate = useNavigate();
+  const { deletion } = useConfirmation();
+  const handleDeletePurchase = () => {
+    deletion("Apakah anda yakin menghapus pembelian ini?", async () => {
+      try {
+        await deletePurchase(uuid ?? "");
+        success(NOTIFICATION_MESSAGE.DELETE_SUCCESS);
+        navigate("/purchase");
+      } catch (err) {
+        console.log(err);
+        failed(NOTIFICATION_MESSAGE.DELETE_FAILED);
+      }
+    });
+  };
   return (
     <Space
       direction="vertical"
@@ -58,7 +76,25 @@ const PurchaseDetailPage = () => {
         width: "100%",
       }}
     >
-      <Typography.Title heading={5}>Detail Pembelian</Typography.Title>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+          justifyContent: "space-between",
+        }}
+      >
+        <div style={{ flex: 1 }}>
+          <Typography.Title heading={5}>Detail Pembelian</Typography.Title>
+        </div>
+        <Button
+          status="danger"
+          icon={<IconDelete />}
+          onClick={handleDeletePurchase}
+        >
+          Hapus Pembelian
+        </Button>
+      </div>
       <PurchaseForm
         form={form}
         onValuesChange={validateForm}

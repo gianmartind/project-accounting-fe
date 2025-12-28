@@ -22,7 +22,10 @@ const usePurchaseService = () => {
 
   const insertPurchase = useCallback(
     async (body: PurchaseDetail): Promise<PurchaseDetail> => {
-      const response = await http.post(`${PURCHASE_API_ENDPOINTS.INSERT}`, body);
+      const response = await http.post(
+        `${PURCHASE_API_ENDPOINTS.INSERT}`,
+        body
+      );
       return Promise.resolve(response.data as PurchaseDetail);
     },
     []
@@ -39,6 +42,11 @@ const usePurchaseService = () => {
     []
   );
 
+  const deletePurchase = useCallback(async (uuid: string) => {
+    await http.post(`${PURCHASE_API_ENDPOINTS.DELETE}/${uuid}`);
+    return Promise.resolve();
+  }, []);
+
   const fetchPurchaseDetail = useCallback(
     async (uuid: string): Promise<PurchaseDetail> => {
       const response = await http.get(
@@ -53,6 +61,7 @@ const usePurchaseService = () => {
     fetchPurchaseRecord,
     insertPurchase,
     updatePurchase,
+    deletePurchase,
     fetchPurchaseDetail,
   };
 };

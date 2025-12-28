@@ -1,4 +1,8 @@
-import type { ProjectDetail, ProjectListRecordRequest, ProjectSimpleResponse } from "./project.interface";
+import type {
+  ProjectDetail,
+  ProjectListRecordRequest,
+  ProjectSimpleResponse,
+} from "./project.interface";
 import { PROJECT_API_ENDPOINTS } from "./project.api";
 import { http } from "../../core/http";
 import { useCallback } from "react";
@@ -35,15 +39,23 @@ const useProjectService = () => {
     []
   );
 
-  const insertProject = useCallback(
-    async (body: ProjectDetail) => {
-      const response = await http.post(`${PROJECT_API_ENDPOINTS.INSERT}`, body);
-      return Promise.resolve(response.data as ProjectDetail);
-    },
-    []
-  );
+  const deleteProject = useCallback(async (uuid: string) => {
+    await http.post(`${PROJECT_API_ENDPOINTS.DELETE}/${uuid}`);
+    return Promise.resolve();
+  }, []);
 
-  return { fetchProjects, getProjectDetail, updateProject, insertProject };
+  const insertProject = useCallback(async (body: ProjectDetail) => {
+    const response = await http.post(`${PROJECT_API_ENDPOINTS.INSERT}`, body);
+    return Promise.resolve(response.data as ProjectDetail);
+  }, []);
+
+  return {
+    fetchProjects,
+    getProjectDetail,
+    updateProject,
+    deleteProject,
+    insertProject,
+  };
 };
 
 export default useProjectService;

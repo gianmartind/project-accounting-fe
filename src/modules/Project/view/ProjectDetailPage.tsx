@@ -20,7 +20,7 @@ import type {
 } from "../../Purchase/purchase.interface";
 import usePurchaseService from "../../Purchase/purchase.service";
 import PurchaseTable from "../../Purchase/components/PurchaseTable";
-import { IconPlus } from "@arco-design/web-react/icon";
+import { IconDelete, IconPlus } from "@arco-design/web-react/icon";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 import PurchaseItemTable from "../../purchase_item/components/PurchaseItemTable";
 import type {
@@ -30,10 +30,12 @@ import type {
 } from "../../purchase_item/purchase-item.interface";
 import usePurchaseItemService from "../../purchase_item/purchase-item.service";
 import SummaryCard from "../../../core/components/SummaryCard";
+import useConfirmation from "../../../core/components/confirmation.services";
 
 const ProjectDetailPage = () => {
   const { uuid } = useParams();
-  const { getProjectDetail, updateProject } = useProjectService();
+  const { getProjectDetail, deleteProject, updateProject } =
+    useProjectService();
   const [originalProjectDetail, setOriginalProjectDetail] =
     useState<ProjectDetail>();
 
@@ -226,10 +228,11 @@ const ProjectDetailPage = () => {
         value: totalProjectPrice,
       };
 
-      const totalProjectTime = calculateProjectTime(originalProjectDetail as ProjectDetail) ?? 0;
+      const totalProjectTime =
+        calculateProjectTime(originalProjectDetail as ProjectDetail) ?? 0;
       const totalTime = {
         title: "Total Waktu Proyek (hari)",
-        value: totalProjectTime
+        value: totalProjectTime,
       };
       setSummaryItems([totalTime, totalPrice]);
     },
@@ -239,22 +242,57 @@ const ProjectDetailPage = () => {
   const calculateProjectTime = (project: ProjectDetail) => {
     if (project.start_date) {
       const startDate = new Date(project.start_date);
-      const endDate = project.end_date ? new Date(project.end_date) : new Date();
+      const endDate = project.end_date
+        ? new Date(project.end_date)
+        : new Date();
       const timeDiff = endDate.getTime() - startDate.getTime();
       const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
       return dayDiff;
     }
-  }
+  };
 
   useEffect(() => {
     if (uuid) {
       getProjectSummary(uuid);
     }
   }, [getProjectSummary, uuid]);
+
+  // Delete Project
+  const { deletion } = useConfirmation();
+  const handleDeleteProject = () => {
+    deletion("Apakah anda yakin menghapus proyek ini?", async () => {
+      try {
+        await deleteProject(uuid ?? "");
+        success(NOTIFICATION_MESSAGE.DELETE_SUCCESS);
+        navigate("/project");
+      } catch (err) {
+        console.log(err);
+        failed(NOTIFICATION_MESSAGE.DELETE_FAILED);
+      }
+    });
+  };
   return (
     <Space direction="vertical" style={{ width: "100%" }}>
       <Space direction="vertical" style={{ width: "100%" }}>
-        <Typography.Title heading={5}>Detail Proyek</Typography.Title>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ flex: 1 }}>
+            <Typography.Title heading={5}>Detail Proyek</Typography.Title>
+          </div>
+          <Button
+            status="danger"
+            icon={<IconDelete />}
+            onClick={handleDeleteProject}
+          >
+            Hapus Proyek
+          </Button>
+        </div>
         <SummaryCard items={summaryItems} />
         <ProjectForm
           form={form}

@@ -103,15 +103,15 @@ const PurchaseItemPage = () => {
     return [
       {
         title: "Pembelian Pertama",
-        value: purchaseItemSummary.first_purchase_date,
+        value: purchaseItemSummary.first_purchase_date ?? "-",
       },
       {
         title: "Pembelian Terakhir",
-        value: purchaseItemSummary.last_purchase_date,
+        value: purchaseItemSummary.last_purchase_date ?? "-",
       },
       {
         title: "Harga Total Pembelian",
-        value: purchaseItemSummary.total_price,
+        value: purchaseItemSummary.total_price ?? 0,
       },
     ];
   };
