@@ -11,8 +11,9 @@ import type {
   PurchaseItemSummary,
 } from "../purchase-item.interface";
 import SummaryCard from "../../../core/components/SummaryCard";
-import useNotification from "../../../core/notification.services";
-import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
+import useNotification from "../../../core/notification.service";
+import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
+import { rupiahFormat } from "../../../core/utils";
 
 const PurchaseItemPage = () => {
   const { fetchPurchaseItemRecord, fetchPurchaseItemSummary } =
@@ -111,7 +112,11 @@ const PurchaseItemPage = () => {
       },
       {
         title: "Harga Total Pembelian",
-        value: purchaseItemSummary.total_price ?? 0,
+        value: `Rp ${
+          purchaseItemSummary.total_price
+            ? rupiahFormat(purchaseItemSummary.total_price)
+            : 0
+        }`,
       },
     ];
   };

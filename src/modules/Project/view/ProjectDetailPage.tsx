@@ -10,8 +10,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import useProjectService from "../project.service";
 import type { ProjectDetail } from "../project.interface";
-import useNotification from "../../../core/notification.services";
-import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
+import useNotification from "../../../core/notification.service";
+import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
 import ProjectForm from "../components/ProjectForm";
 import type {
   PurchaseListRecordFilter,
@@ -31,6 +31,7 @@ import type {
 import usePurchaseItemService from "../../purchase_item/purchase-item.service";
 import SummaryCard from "../../../core/components/SummaryCard";
 import useConfirmation from "../../../core/components/confirmation.services";
+import { rupiahFormat } from "../../../core/utils";
 
 const ProjectDetailPage = () => {
   const { uuid } = useParams();
@@ -218,14 +219,14 @@ const ProjectDetailPage = () => {
 
   // Summary Card Data
   const [summaryItems, setSummaryItems] = useState<
-    { title: string; value: number }[]
+    { title: string; value: string | number }[]
   >([]);
   const getProjectSummary = useCallback(
     async (project_uuid: string) => {
       const totalProjectPrice = await fetchTotalProjectPrice(project_uuid);
       const totalPrice = {
-        title: "Total Pembelian Proyek (Rp)",
-        value: totalProjectPrice,
+        title: "Total Pembelian Proyek",
+        value: `Rp ${totalProjectPrice ? rupiahFormat(totalProjectPrice) : 0}`,
       };
 
       const totalProjectTime =

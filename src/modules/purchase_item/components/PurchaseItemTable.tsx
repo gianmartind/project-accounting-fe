@@ -16,6 +16,7 @@ import InputSearchFilter from "../../../core/components/filters/components/Input
 import type { FilterDropdownProps } from "../../../core/components/filters/interface/filter.interface";
 import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
 import NumberRangeFilter from "../../../core/components/filters/components/NumberRangeFilter";
+import { rupiahFormat } from "../../../core/utils";
 
 type Props = {
   data: PurchaseItemListRecordResponse;
@@ -212,7 +213,9 @@ const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase }: Props) => {
       title: "Harga",
       dataIndex: "price",
       sorter: true,
-
+      render: (_: unknown, record: PurchaseItemListRecord) => {
+        return `Rp ${rupiahFormat(record.price)}`;
+      },
       filterIcon: <IconFilter />,
       filterDropdown: ({
         setFilterKeys,
@@ -232,6 +235,9 @@ const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase }: Props) => {
       key: "total_price",
       title: "Harga Total",
       dataIndex: "total_price",
+      render: (_: unknown, record: PurchaseItemListRecord) => {
+        return `Rp ${rupiahFormat(record.total_price)}`;
+      },
       filterIcon: <IconFilter />,
       filterDropdown: ({
         setFilterKeys,

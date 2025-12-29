@@ -10,8 +10,8 @@ import type {
 import usePurchaseService from "../purchase.service";
 import PurchaseTable from "../components/PurchaseTable";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
-import useNotification from "../../../core/notification.services";
-import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
+import useNotification from "../../../core/notification.service";
+import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
 
 const PurchasePage = () => {
   const { fetchPurchaseRecord } = usePurchaseService();

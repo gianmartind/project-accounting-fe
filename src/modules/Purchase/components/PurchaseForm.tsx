@@ -16,6 +16,7 @@ import useProjectService from "../../Project/project.service";
 import useStoreService from "../../store/store.service";
 import usePurchaseItemService from "../../purchase_item/purchase-item.service";
 import type { ProjectListRecordRequest } from "../../Project/project.interface";
+import { FORM_LABEL_COL, FORM_WRAPPER_COL } from "../../../core/form.constant";
 
 type Props = {
   form: FormInstance<PurchaseDetail>;
@@ -67,7 +68,7 @@ const PurchaseForm = ({
     const param: ProjectListRecordRequest = {
       page: 0,
       size: 9999,
-    }
+    };
     fetchProjects(param).then((response) => {
       const optionList = response.content.map((item) => {
         return {
@@ -111,7 +112,13 @@ const PurchaseForm = ({
   };
   return (
     <Form form={form} onValuesChange={handleFormChange}>
-      <Form.Item label="Toko" field="store_name" rules={required.current}>
+      <Form.Item
+        label="Toko"
+        field="store_name"
+        rules={required.current}
+        labelCol={FORM_LABEL_COL}
+        wrapperCol={FORM_WRAPPER_COL}
+      >
         <Select
           allowCreate
           allowClear
@@ -119,65 +126,87 @@ const PurchaseForm = ({
           options={storesName}
         />
       </Form.Item>
-      <Form.Item label="Proyek" field="project_uuid" rules={required.current}>
+      <Form.Item
+        label="Proyek"
+        field="project_uuid"
+        rules={required.current}
+        labelCol={FORM_LABEL_COL}
+        wrapperCol={FORM_WRAPPER_COL}
+      >
         <Select allowClear placeholder="Nama Proyek" options={projectOptions} />
       </Form.Item>
-      <Form.Item label="Tanggal" field="purchase_date" rules={required.current}>
+      <Form.Item
+        label="Tanggal"
+        field="purchase_date"
+        rules={required.current}
+        labelCol={FORM_LABEL_COL}
+        wrapperCol={FORM_WRAPPER_COL}
+      >
         <DatePicker placeholder="Please select" />
       </Form.Item>
-      <Form.Item label="Catatan" field="notes">
+      <Form.Item
+        label="Catatan"
+        field="notes"
+        labelCol={FORM_LABEL_COL}
+        wrapperCol={FORM_WRAPPER_COL}
+      >
         <Input.TextArea
           style={{ minHeight: 80 }}
           maxLength={255}
           showWordLimit
         />
       </Form.Item>
-      <Form.Item label="Items">
+      <Form.Item
+        label="Items"
+        labelCol={FORM_LABEL_COL}
+        wrapperCol={FORM_WRAPPER_COL}
+      >
         <Form.List field="items">
           {(fields, { add, remove }) => {
             return (
               <div>
                 <div style={{ marginBottom: "2vh" }}>
-                  <Grid.Row gutter={2}>
-                    <Grid.Col span={3}>
+                  <Grid cols={48} colGap={2} rowGap={4}>
+                    <Grid.GridItem span={6}>
                       <div style={centeredTextStyle}>Nama</div>
-                    </Grid.Col>
-                    <Grid.Col span={3}>
+                    </Grid.GridItem>
+                    <Grid.GridItem span={6}>
                       <div style={centeredTextStyle}>Jenis</div>
-                    </Grid.Col>
-                    <Grid.Col span={3}>
+                    </Grid.GridItem>
+                    <Grid.GridItem span={6}>
                       <div style={centeredTextStyle}>Kategori</div>
-                    </Grid.Col>
-                    <Grid.Col span={3}>
+                    </Grid.GridItem>
+                    <Grid.GridItem span={6}>
                       <div style={centeredTextStyle}>Merk</div>
-                    </Grid.Col>
-                    <Grid.Col span={1}>
+                    </Grid.GridItem>
+                    <Grid.GridItem span={3}>
                       <div style={centeredTextStyle}>Jumlah</div>
-                    </Grid.Col>
-                    <Grid.Col span={2}>
+                    </Grid.GridItem>
+                    <Grid.GridItem span={4}>
                       <div style={centeredTextStyle}>Unit</div>
-                    </Grid.Col>
-                    <Grid.Col span={4}>
+                    </Grid.GridItem>
+                    <Grid.GridItem span={8}>
                       <div style={centeredTextStyle}>Harga Satuan</div>
-                    </Grid.Col>
-                    <Grid.Col span={4}>
+                    </Grid.GridItem>
+                    <Grid.GridItem span={8}>
                       <div style={centeredTextStyle}>Harga Total</div>
-                    </Grid.Col>
-                    <Grid.Col span={1}>
-                      <div
-                        style={centeredTextStyle}
-                      ></div>
-                    </Grid.Col>
-                  </Grid.Row>
+                    </Grid.GridItem>
+                    <Grid.GridItem span={1}>
+                      <div style={centeredTextStyle}></div>
+                    </Grid.GridItem>
+                  </Grid>
                 </div>
                 {fields.map((item, index) => {
-                  const itemValue = form.getFieldValue("items")[index] as PurchaseItem;
-                  const totalPrice = (itemValue?.amount ?? 0) * (itemValue?.price ?? 0);
+                  const itemValue = form.getFieldValue("items")[
+                    index
+                  ] as PurchaseItem;
+                  const totalPrice =
+                    (itemValue?.amount ?? 0) * (itemValue?.price ?? 0);
                   return (
                     <div key={item.key}>
                       <Form.Item style={{ marginBottom: "1vh" }}>
-                        <Grid.Row gutter={2}>
-                          <Grid.Col span={3}>
+                        <Grid cols={48} colGap={2} rowGap={4}>
+                          <Grid.GridItem span={6}>
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.name`}
@@ -187,8 +216,8 @@ const PurchaseForm = ({
                                 <Input placeholder="Nama" />
                               </Form.Item>
                             </div>
-                          </Grid.Col>
-                          <Grid.Col span={3}>
+                          </Grid.GridItem>
+                          <Grid.GridItem span={6}>
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.type`}
@@ -203,8 +232,8 @@ const PurchaseForm = ({
                                 />
                               </Form.Item>
                             </div>
-                          </Grid.Col>
-                          <Grid.Col span={3}>
+                          </Grid.GridItem>
+                          <Grid.GridItem span={6}>
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.category`}
@@ -219,8 +248,8 @@ const PurchaseForm = ({
                                 />
                               </Form.Item>
                             </div>
-                          </Grid.Col>
-                          <Grid.Col span={3}>
+                          </Grid.GridItem>
+                          <Grid.GridItem span={6}>
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.brand`}
@@ -235,8 +264,8 @@ const PurchaseForm = ({
                                 />
                               </Form.Item>
                             </div>
-                          </Grid.Col>
-                          <Grid.Col span={1}>
+                          </Grid.GridItem>
+                          <Grid.GridItem span={3}>
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.amount`}
@@ -246,8 +275,8 @@ const PurchaseForm = ({
                                 <InputNumber placeholder="Jumlah" min={1} />
                               </Form.Item>
                             </div>
-                          </Grid.Col>
-                          <Grid.Col span={2}>
+                          </Grid.GridItem>
+                          <Grid.GridItem span={4}>
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.unit`}
@@ -262,8 +291,8 @@ const PurchaseForm = ({
                                 />
                               </Form.Item>
                             </div>
-                          </Grid.Col>
-                          <Grid.Col span={4}>
+                          </Grid.GridItem>
+                          <Grid.GridItem span={8}>
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.price`}
@@ -273,31 +302,36 @@ const PurchaseForm = ({
                                 <InputNumber prefix="Rp" placeholder="Satuan" />
                               </Form.Item>
                             </div>
-                          </Grid.Col>
-                          <Grid.Col span={4}>
+                          </Grid.GridItem>
+                          <Grid.GridItem span={8}>
                             <div style={centeredTextStyle}>
-                              <InputNumber prefix="Rp" placeholder="Total" value={totalPrice} readOnly/>
+                              <InputNumber
+                                prefix="Rp"
+                                placeholder="Total"
+                                value={totalPrice}
+                                readOnly
+                              />
                             </div>
-                          </Grid.Col>
-                          <Grid.Col span={1}>
+                          </Grid.GridItem>
+                          <Grid.GridItem span={1}>
                             <div style={centeredTextStyle}>
                               <Button
                                 icon={<IconDelete />}
-                                shape="circle"
+                                type="text"
                                 status="danger"
                                 onClick={() => {
                                   remove(index);
                                 }}
                               ></Button>
                             </div>
-                          </Grid.Col>
-                        </Grid.Row>
+                          </Grid.GridItem>
+                        </Grid>
                       </Form.Item>
                     </div>
                   );
                 })}
                 <Space direction="horizontal">
-                  <Form.Item wrapperCol={{ offset: 5 }} noStyle>
+                  <Form.Item noStyle>
                     <Button
                       type="text"
                       onClick={() => {
@@ -314,7 +348,7 @@ const PurchaseForm = ({
           }}
         </Form.List>
       </Form.Item>
-      <Form.Item wrapperCol={{ offset: 5 }}>
+      <Form.Item wrapperCol={{ offset: FORM_LABEL_COL.span }}>
         <Button
           type="primary"
           loading={saveLoading}

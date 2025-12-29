@@ -1,10 +1,10 @@
 import { Space, Typography, Form } from "@arco-design/web-react";
 import { type PurchaseDetail } from "../purchase.interface";
 import usePurchaseService from "../purchase.service";
-import useNotification from "../../../core/notification.services";
-import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
+import useNotification from "../../../core/notification.service";
+import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
 import PurchaseForm from "../components/PurchaseForm";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useCallback } from "react";
 
 const PurchaseNewPage = () => {
@@ -20,15 +20,15 @@ const PurchaseNewPage = () => {
     form.setFieldValue("project_uuid", projectUuid);
   }, [form, projectUuid]);
 
+  const navigate = useNavigate();
   const handleSave = async () => {
     try {
       await form.validate();
-      await insertPurchase(
-        form.getFieldsValue() as PurchaseDetail
-      );
+      const response = await insertPurchase(form.getFieldsValue() as PurchaseDetail);
       success(NOTIFICATION_MESSAGE.SAVE_SUCCESS);
+      navigate(`/purchase/detail/${response.uuid}`);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       failed(NOTIFICATION_MESSAGE.SAVE_FAILED);
     }
   };
@@ -41,7 +41,11 @@ const PurchaseNewPage = () => {
       }}
     >
       <Typography.Title heading={5}>Pembelian Baru</Typography.Title>
-      <PurchaseForm form={form} onSave={handleSave} onProjectOptionsLoaded={handlePreAssignProject}/>
+      <PurchaseForm
+        form={form}
+        onSave={handleSave}
+        onProjectOptionsLoaded={handlePreAssignProject}
+      />
     </Space>
   );
 };

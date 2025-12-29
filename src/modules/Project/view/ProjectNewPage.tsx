@@ -4,8 +4,8 @@ import {
   Typography,
 } from "@arco-design/web-react";
 import type { ProjectDetail } from "../project.interface";
-import useNotification from "../../../core/notification.services";
-import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
+import useNotification from "../../../core/notification.service";
+import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
 import ProjectForm from "../components/ProjectForm";
 import useProjectService from "../project.service";
 import { useNavigate } from "react-router";

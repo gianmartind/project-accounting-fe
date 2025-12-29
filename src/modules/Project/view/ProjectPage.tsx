@@ -25,8 +25,8 @@ import InputSearchFilter from "../../../core/components/filters/components/Input
 import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 import RadioFilter from "../../../core/components/filters/components/RadioFilter";
-import useNotification from "../../../core/notification.services";
-import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
+import useNotification from "../../../core/notification.service";
+import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
 
 const ProjectPage = () => {
   const columns = useRef([

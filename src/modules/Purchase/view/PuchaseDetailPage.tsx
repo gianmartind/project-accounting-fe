@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import type { PurchaseDetail } from "../purchase.interface";
 import { Button, Form, Space, Typography } from "@arco-design/web-react";
 import PurchaseForm from "../components/PurchaseForm";
-import useNotification from "../../../core/notification.services";
-import { NOTIFICATION_MESSAGE } from "../../../core/notification.enum";
+import useNotification from "../../../core/notification.service";
+import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
 import { IconDelete } from "@arco-design/web-react/icon";
 import useConfirmation from "../../../core/components/confirmation.services";
 

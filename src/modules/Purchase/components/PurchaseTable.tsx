@@ -1,5 +1,10 @@
 import { Button, Table, type PaginationProps } from "@arco-design/web-react";
-import { IconCalendar, IconExpand, IconFilter, IconSearch } from "@arco-design/web-react/icon";
+import {
+  IconCalendar,
+  IconExpand,
+  IconFilter,
+  IconSearch,
+} from "@arco-design/web-react/icon";
 import { useEffect, useState } from "react";
 import type {
   PurchaseListRecord,
@@ -10,6 +15,7 @@ import InputSearchFilter from "../../../core/components/filters/components/Input
 import type { FilterDropdownProps } from "../../../core/components/filters/interface/filter.interface";
 import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
 import NumberRangeFilter from "../../../core/components/filters/components/NumberRangeFilter";
+import { rupiahFormat } from "../../../core/utils";
 
 type Props = {
   data: PurchaseListRecordResponse;
@@ -21,11 +27,7 @@ type Props = {
   onPuchaseDetailOpen: (uuid: string) => void;
 };
 
-const PurchaseTable = ({
-  data,
-  onTableChange,
-  onPuchaseDetailOpen,
-}: Props) => {
+const PurchaseTable = ({ data, onTableChange, onPuchaseDetailOpen }: Props) => {
   const columns = [
     {
       key: "purchase_date",
@@ -91,6 +93,9 @@ const PurchaseTable = ({
       key: "total_price",
       title: "Total Price",
       dataIndex: "total_price",
+      render: (_: unknown, record: PurchaseListRecord) => {
+        return `Rp ${rupiahFormat(record.total_price)}`;
+      },
       filterIcon: <IconFilter />,
       filterDropdown: ({
         setFilterKeys,
