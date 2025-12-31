@@ -18,7 +18,7 @@ import { rupiahFormat } from "../../../core/utils";
 const PurchaseItemPage = () => {
   const { fetchPurchaseItemRecord, fetchPurchaseItemSummary } =
     usePurchaseItemService();
-
+  const [tableLoading, setTableLoading] = useState<boolean>(false);
   const [purchaseItemList, setPurchaseItemList] =
     useState<PurchaseItemListRecordResponse>({
       content: [],
@@ -72,6 +72,7 @@ const PurchaseItemPage = () => {
   const getPurchaseItemRecordData = useCallback(
     async (param: PurchaseItemListRecordRequest) => {
       try {
+        setTableLoading(true);
         const response = await fetchPurchaseItemRecord(param);
         setPurchaseItemList(response);
 
@@ -80,6 +81,8 @@ const PurchaseItemPage = () => {
       } catch (err) {
         console.log(err);
         failed(NOTIFICATION_MESSAGE.FETCH_FAILED);
+      } finally {
+        setTableLoading(false);
       }
     },
     [failed, fetchPurchaseItemRecord, fetchPurchaseItemSummary]
@@ -140,6 +143,7 @@ const PurchaseItemPage = () => {
           onOpenPurchase={handleOpenPurchase}
           data={purchaseItemList}
           onTableChange={handleTableChange}
+          loading={tableLoading}
         />
       </Space>
     </div>

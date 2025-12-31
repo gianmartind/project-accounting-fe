@@ -81,12 +81,22 @@ const ProjectDetailPage = () => {
 
   // Variables for Purchase Section
   const { fetchPurchaseRecord } = usePurchaseService();
+  const [purchaseTableLoading, setPurchaseTableLoading] =
+    useState<boolean>(false);
   const getPurchaseRecordData = useCallback(
     async (param: PurchaseListRecordRequest) => {
-      const response = await fetchPurchaseRecord(param);
-      setPurchaseList(response);
+      try {
+        setPurchaseTableLoading(true);
+        const response = await fetchPurchaseRecord(param);
+        setPurchaseList(response);
+      } catch (err) {
+        console.log(err);
+        failed(NOTIFICATION_MESSAGE.FETCH_FAILED);
+      } finally {
+        setPurchaseTableLoading(false);
+      }
     },
-    [fetchPurchaseRecord]
+    [fetchPurchaseRecord, failed, setPurchaseTableLoading]
   );
   const handlePurchaseTableChange = (
     pagination: PaginationProps,
@@ -132,7 +142,23 @@ const ProjectDetailPage = () => {
   // Variables for PurchaseItem Section
   const { fetchPurchaseItemRecord, fetchTotalProjectPrice } =
     usePurchaseItemService();
-
+  const [purchaseItemTableLoading, setPurchaseItemTableLoading] =
+    useState<boolean>(false);
+  const getPurchaseItemRecordData = useCallback(
+    async (param: PurchaseItemListRecordRequest) => {
+      try {
+        setPurchaseItemTableLoading(true);
+        const response = await fetchPurchaseItemRecord(param);
+        setPurchaseItemList(response);
+      } catch (err) {
+        console.log(err);
+        failed(NOTIFICATION_MESSAGE.FETCH_FAILED);
+      } finally {
+        setPurchaseItemTableLoading(false);
+      }
+    },
+    [fetchPurchaseItemRecord, failed, setPurchaseItemTableLoading]
+  );
   const [purchaseItemList, setPurchaseItemList] =
     useState<PurchaseItemListRecordResponse>({
       content: [],
@@ -183,14 +209,6 @@ const ProjectDetailPage = () => {
     getPurchaseItemRecordData(param);
   };
 
-  const getPurchaseItemRecordData = useCallback(
-    async (param: PurchaseItemListRecordRequest) => {
-      const response = await fetchPurchaseItemRecord(param);
-      setPurchaseItemList(response);
-    },
-    [fetchPurchaseItemRecord]
-  );
-
   useEffect(() => {
     const param: PurchaseItemListRecordRequest = {
       project_uuid: uuid,
@@ -201,10 +219,6 @@ const ProjectDetailPage = () => {
   }, [getPurchaseItemRecordData, uuid]);
 
   const navigate = useNavigate();
-
-  const handleOpenPurchase = (uuid: string) => {
-    navigate(`/purchase/detail/${uuid}`);
-  };
 
   const handleOpenPurchaseDetail = (uuid: string) => {
     navigate(`/purchase/detail/${uuid}`);
@@ -336,13 +350,15 @@ const ProjectDetailPage = () => {
             onPuchaseDetailOpen={handleOpenPurchaseDetail}
             data={purchaseList}
             onTableChange={handlePurchaseTableChange}
+            loading={purchaseTableLoading}
           />
         )}
         {puchaseDisplay === "purchase_item" && (
           <PurchaseItemTable
-            onOpenPurchase={handleOpenPurchase}
+            onOpenPurchase={handleOpenPurchaseDetail}
             data={purchaseItemList}
             onTableChange={handleTableChange}
+            loading={purchaseItemTableLoading}
           />
         )}
       </Space>

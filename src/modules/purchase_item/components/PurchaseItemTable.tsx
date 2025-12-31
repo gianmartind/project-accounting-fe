@@ -26,9 +26,10 @@ type Props = {
     filters: Partial<Record<keyof PurchaseItemListRecordFilter, string[]>>
   ) => void;
   onOpenPurchase: (name: string) => void;
+  loading?: boolean;
 };
 
-const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase }: Props) => {
+const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase, loading }: Props) => {
   const columns = [
     {
       key: "purchase_date",
@@ -305,6 +306,7 @@ const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase }: Props) => {
       onChange={handleTableChange}
       pagination={pagination}
       data={data.content}
+      loading={loading}
     />
   );
 };

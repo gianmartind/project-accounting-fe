@@ -15,7 +15,7 @@ import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
 
 const PurchasePage = () => {
   const { fetchPurchaseRecord } = usePurchaseService();
-
+  const [tableLoading, setTableLoading] = useState<boolean>(false);
   const [purchaseList, setPurchaseList] = useState<PurchaseListRecordResponse>({
     content: [],
     total_elements: 0,
@@ -53,11 +53,14 @@ const PurchasePage = () => {
   const getPurchaseRecordData = useCallback(
     async (param: PurchaseListRecordRequest) => {
       try {
+        setTableLoading(true);
         const response = await fetchPurchaseRecord(param);
         setPurchaseList(response);
       } catch (err) {
         console.log(err);
         failed(NOTIFICATION_MESSAGE.FETCH_FAILED);
+      } finally {
+        setTableLoading(false);
       }
     },
     [failed, fetchPurchaseRecord]
@@ -100,6 +103,7 @@ const PurchasePage = () => {
           onPuchaseDetailOpen={handleOpenPurchaseDetail}
           data={purchaseList}
           onTableChange={handleTableChange}
+          loading={tableLoading}
         />
       </Space>
     </div>

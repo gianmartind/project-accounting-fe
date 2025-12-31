@@ -188,17 +188,21 @@ const ProjectPage = () => {
     size: 10,
     number: 1,
   });
+  const [tableLoading, setTableLoading] = useState<boolean>(false);
   const { fetchProjects } = useProjectService();
   const { failed } = useNotification();
 
   const getProjectList = useCallback(
     async (param: ProjectListRecordRequest) => {
       try {
+        setTableLoading(true);
         const response = await fetchProjects(param);
         setProjectList(response);
       } catch (err) {
         console.log(err);
         failed(NOTIFICATION_MESSAGE.FETCH_FAILED);
+      } finally {
+        setTableLoading(false);
       }
     },
     [failed, fetchProjects]
@@ -289,6 +293,7 @@ const ProjectPage = () => {
           data={projectList.content}
           pagination={pagination}
           onChange={handleTableChange}
+          loading={tableLoading}
         />
       </Space>
     </div>
