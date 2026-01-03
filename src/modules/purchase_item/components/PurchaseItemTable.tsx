@@ -35,6 +35,7 @@ const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase, loading }: Pro
       key: "purchase_date",
       title: "Tanggal",
       dataIndex: "purchase_date",
+      sorter: true,
       filterIcon: <IconCalendar />,
       filterDropdown: ({
         setFilterKeys,
@@ -54,6 +55,7 @@ const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase, loading }: Pro
       key: "project_name",
       title: "Proyek",
       dataIndex: "project_name",
+      sorter: true,
       filterIcon: <IconSearch />,
       filterDropdown: ({
         setFilterKeys,
@@ -73,6 +75,7 @@ const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase, loading }: Pro
       key: "store_name",
       title: "Toko",
       dataIndex: "store_name",
+      sorter: true,
       filterIcon: <IconSearch />,
       filterDropdown: ({
         setFilterKeys,
@@ -239,6 +242,7 @@ const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase, loading }: Pro
       render: (_: unknown, record: PurchaseItemListRecord) => {
         return `Rp ${rupiahFormat(record.total_price)}`;
       },
+      sorter: true,
       filterIcon: <IconFilter />,
       filterDropdown: ({
         setFilterKeys,

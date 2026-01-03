@@ -97,6 +97,7 @@ const PurchaseTable = ({ data, onTableChange, onPuchaseDetailOpen, loading }: Pr
       render: (_: unknown, record: PurchaseListRecord) => {
         return `Rp ${rupiahFormat(record.total_price)}`;
       },
+      sorter: true,
       filterIcon: <IconFilter />,
       filterDropdown: ({
         setFilterKeys,
