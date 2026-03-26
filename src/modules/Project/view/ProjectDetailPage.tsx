@@ -3,6 +3,7 @@ import {
   Form,
   Radio,
   Space,
+  Spin,
   Typography,
   type PaginationProps,
 } from "@arco-design/web-react";
@@ -34,22 +35,25 @@ import useConfirmation from "../../../core/components/confirmation.services";
 import { rupiahFormat } from "../../../core/utils";
 
 const ProjectDetailPage = () => {
+  const [pageLoading, setPageLoading] = useState<boolean>(false);
   const { uuid } = useParams();
   const { getProjectDetail, deleteProject, updateProject } =
     useProjectService();
   const [originalProjectDetail, setOriginalProjectDetail] =
     useState<ProjectDetail>();
 
-  useEffect(() => {
-    getProjectDetail(uuid ?? "").then((response) => {
-      setOriginalProjectDetail(response);
-    });
-  }, [getProjectDetail, uuid]);
-
   const [form] = Form.useForm<ProjectDetail>();
+
   useEffect(() => {
-    form.setFieldsValue({ ...originalProjectDetail });
-  }, [form, originalProjectDetail]);
+    setPageLoading(true);
+    getProjectDetail(uuid ?? "")
+      .then((response) => {
+        setOriginalProjectDetail(response);
+        form.setFieldsValue({ ...response });
+      })
+      .finally(() => setPageLoading(false));
+  }, [getProjectDetail, uuid, form]);
+
   const [formIsValid, setFormIsValid] = useState<boolean>(false);
 
   const validateForm = () => {
@@ -58,17 +62,18 @@ const ProjectDetailPage = () => {
       originalProjectDetail as ProjectDetail;
     setFormIsValid(
       JSON.stringify(form.getFieldsValue()) !==
-        JSON.stringify(originalProjectValue)
+        JSON.stringify(originalProjectValue),
     );
   };
 
   const { success, failed } = useNotification();
   const handleSave = async () => {
     try {
+      setPageLoading(true);
       await form.validate();
       const response = await updateProject(
         uuid ?? "",
-        form.getFieldsValue() as ProjectDetail
+        form.getFieldsValue() as ProjectDetail,
       );
       success(NOTIFICATION_MESSAGE.SAVE_SUCCESS);
       setOriginalProjectDetail(response);
@@ -76,6 +81,8 @@ const ProjectDetailPage = () => {
       console.log(err);
       form.setFieldsValue({ ...originalProjectDetail });
       failed(NOTIFICATION_MESSAGE.SAVE_FAILED);
+    } finally {
+      setPageLoading(false);
     }
   };
 
@@ -96,12 +103,12 @@ const ProjectDetailPage = () => {
         setPurchaseTableLoading(false);
       }
     },
-    [fetchPurchaseRecord, failed, setPurchaseTableLoading]
+    [fetchPurchaseRecord, failed, setPurchaseTableLoading],
   );
   const handlePurchaseTableChange = (
     pagination: PaginationProps,
     sorter: SorterInfo | SorterInfo[],
-    filters: Partial<Record<keyof PurchaseListRecordFilter, string[]>>
+    filters: Partial<Record<keyof PurchaseListRecordFilter, string[]>>,
   ) => {
     const sort =
       !Array.isArray(sorter) && sorter.direction
@@ -157,7 +164,7 @@ const ProjectDetailPage = () => {
         setPurchaseItemTableLoading(false);
       }
     },
-    [fetchPurchaseItemRecord, failed, setPurchaseItemTableLoading]
+    [fetchPurchaseItemRecord, failed, setPurchaseItemTableLoading],
   );
   const [purchaseItemList, setPurchaseItemList] =
     useState<PurchaseItemListRecordResponse>({
@@ -171,7 +178,7 @@ const ProjectDetailPage = () => {
   const handleTableChange = (
     pagination: PaginationProps,
     sorter: SorterInfo | SorterInfo[],
-    filters: Partial<Record<keyof PurchaseItemListRecordFilter, string[]>>
+    filters: Partial<Record<keyof PurchaseItemListRecordFilter, string[]>>,
   ) => {
     const sort =
       !Array.isArray(sorter) && sorter.direction
@@ -251,7 +258,7 @@ const ProjectDetailPage = () => {
       };
       setSummaryItems([totalTime, totalPrice]);
     },
-    [fetchTotalProjectPrice, originalProjectDetail]
+    [fetchTotalProjectPrice, originalProjectDetail],
   );
 
   const calculateProjectTime = (project: ProjectDetail) => {
@@ -277,92 +284,97 @@ const ProjectDetailPage = () => {
   const handleDeleteProject = () => {
     deletion("Apakah anda yakin menghapus proyek ini?", async () => {
       try {
+        setPageLoading(true);
         await deleteProject(uuid ?? "");
         success(NOTIFICATION_MESSAGE.DELETE_SUCCESS);
         navigate("/project");
       } catch (err) {
         console.log(err);
         failed(NOTIFICATION_MESSAGE.DELETE_FAILED);
+      } finally {
+        setPageLoading(false);
       }
     });
   };
   return (
-    <Space direction="vertical" style={{ width: "100%" }}>
+    <Spin loading={pageLoading} style={{ width: "100%" }}>
       <Space direction="vertical" style={{ width: "100%" }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ flex: 1 }}>
-            <Typography.Title heading={5}>Detail Proyek</Typography.Title>
+        <Space direction="vertical" style={{ width: "100%" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <Typography.Title heading={5}>Detail Proyek</Typography.Title>
+            </div>
+            <Button
+              status="danger"
+              icon={<IconDelete />}
+              onClick={handleDeleteProject}
+            >
+              Hapus Proyek
+            </Button>
           </div>
-          <Button
-            status="danger"
-            icon={<IconDelete />}
-            onClick={handleDeleteProject}
+          <SummaryCard items={summaryItems} />
+          <ProjectForm
+            form={form}
+            onValuesChange={validateForm}
+            saveDisabled={!formIsValid}
+            onSave={handleSave}
+          />
+        </Space>
+        <Space direction="vertical" style={{ width: "100%" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              justifyContent: "space-between",
+            }}
           >
-            Hapus Proyek
-          </Button>
-        </div>
-        <SummaryCard items={summaryItems} />
-        <ProjectForm
-          form={form}
-          onValuesChange={validateForm}
-          saveDisabled={!formIsValid}
-          onSave={handleSave}
-        />
-      </Space>
-      <Space direction="vertical" style={{ width: "100%" }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ flex: 1 }}>
-            <Typography.Title heading={5}>Pembelian Proyek</Typography.Title>
+            <div style={{ flex: 1 }}>
+              <Typography.Title heading={5}>Pembelian Proyek</Typography.Title>
+            </div>
+            <Radio.Group
+              type="button"
+              defaultValue="purchase"
+              onChange={(value) => setPurchaseDisplay(value)}
+            >
+              <Radio value="purchase">Pembelian</Radio>
+              <Radio value="purchase_item">Item</Radio>
+            </Radio.Group>
+            <div style={{ width: "1vw" }}></div>
+            <Button
+              type="primary"
+              icon={<IconPlus />}
+              onClick={handleAddNewPurchase}
+            >
+              Tambah Pembelian
+            </Button>
           </div>
-          <Radio.Group
-            type="button"
-            defaultValue="purchase"
-            onChange={(value) => setPurchaseDisplay(value)}
-          >
-            <Radio value="purchase">Pembelian</Radio>
-            <Radio value="purchase_item">Item</Radio>
-          </Radio.Group>
-          <div style={{ width: "1vw" }}></div>
-          <Button
-            type="primary"
-            icon={<IconPlus />}
-            onClick={handleAddNewPurchase}
-          >
-            Tambah Pembelian
-          </Button>
-        </div>
-        {puchaseDisplay === "purchase" && (
-          <PurchaseTable
-            onPuchaseDetailOpen={handleOpenPurchaseDetail}
-            data={purchaseList}
-            onTableChange={handlePurchaseTableChange}
-            loading={purchaseTableLoading}
-          />
-        )}
-        {puchaseDisplay === "purchase_item" && (
-          <PurchaseItemTable
-            onOpenPurchase={handleOpenPurchaseDetail}
-            data={purchaseItemList}
-            onTableChange={handleTableChange}
-            loading={purchaseItemTableLoading}
-          />
-        )}
+          {puchaseDisplay === "purchase" && (
+            <PurchaseTable
+              onPuchaseDetailOpen={handleOpenPurchaseDetail}
+              data={purchaseList}
+              onTableChange={handlePurchaseTableChange}
+              loading={purchaseTableLoading}
+            />
+          )}
+          {puchaseDisplay === "purchase_item" && (
+            <PurchaseItemTable
+              onOpenPurchase={handleOpenPurchaseDetail}
+              data={purchaseItemList}
+              onTableChange={handleTableChange}
+              loading={purchaseItemTableLoading}
+            />
+          )}
+        </Space>
       </Space>
-    </Space>
+    </Spin>
   );
 };
 
