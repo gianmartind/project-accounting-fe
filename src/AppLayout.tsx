@@ -46,7 +46,6 @@ const AppLayout = () => {
         className="full-height"
         collapsed={collapsed}
         defaultCollapsed={true}
-        onCollapse={() => setCollapsed(!collapsed)}
         collapsible
         trigger={null}
         breakpoint="xl"
