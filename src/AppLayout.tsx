@@ -68,6 +68,7 @@ const AppLayout = () => {
               </Button>
               <PageHeader
                 title={currentRoute?.title}
+                subTitle={currentRoute?.path}
                 style={{ padding: "0px 0px" }}
               />
             </Grid.Row>
