@@ -1,11 +1,12 @@
-import { Layout, Menu, PageHeader } from "@arco-design/web-react";
-import Content from "@arco-design/web-react/es/Layout/content";
-import Sider from "@arco-design/web-react/es/Layout/sider";
 import {
-  IconCaretRight,
-  IconCaretLeft,
-  IconMenu,
-} from "@arco-design/web-react/icon";
+  Button,
+  Card,
+  Grid,
+  Layout,
+  Menu,
+  PageHeader,
+} from "@arco-design/web-react";
+import { IconMenu, IconRight, IconLeft } from "@arco-design/web-react/icon";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import "./App.css";
 import { useEffect, useState } from "react";
@@ -15,12 +16,12 @@ import { findRouteByPath } from "./core/utils";
 const MenuItem = Menu.Item;
 
 const AppLayout = () => {
-  const [collapsed, setCollapsed] = useState<boolean>();
-  const menuItem = routes.map((route, index) => {
+  const [collapsed, setCollapsed] = useState<boolean>(true);
+  const menuItem = routes.map((route) => {
     if (route.sidebarMenu) {
       const MenuIcon = route.icon ?? IconMenu;
       return (
-        <MenuItem key={String(index)}>
+        <MenuItem key={route.path}>
           <MenuIcon />
           {route.title}
         </MenuItem>
@@ -30,7 +31,7 @@ const AppLayout = () => {
 
   const navigate = useNavigate();
   const handleClickMenuItem = (key: string) => {
-    navigate(routes[Number(key)].path);
+    navigate(findRouteByPath(key, routes)?.path ?? "/");
   };
 
   const location = useLocation();
@@ -41,26 +42,44 @@ const AppLayout = () => {
 
   return (
     <Layout className="full-height">
-      <Sider
+      <Layout.Sider
         className="full-height"
         collapsed={collapsed}
+        defaultCollapsed={true}
         onCollapse={() => setCollapsed(!collapsed)}
         collapsible
-        trigger={collapsed ? <IconCaretRight /> : <IconCaretLeft />}
+        trigger={null}
         breakpoint="xl"
       >
-        <Menu onClickMenuItem={handleClickMenuItem} style={{ width: "100%" }}>
+        <Menu
+          selectedKeys={[currentRoute?.path ?? "/"]}
+          onClickMenuItem={handleClickMenuItem}
+          style={{ width: "100%" }}
+        >
           {menuItem}
         </Menu>
-      </Sider>
+      </Layout.Sider>
       <Layout>
-        <PageHeader
-          style={{ background: "var(--color-bg-2)" }}
-          title={currentRoute?.title}
-        />
-        <Content style={{ padding: "1.5rem" }}>
-          <Outlet />
-        </Content>
+        <Layout.Header>
+          <Card size="small">
+            <Grid.Row>
+              <Button type="text" onClick={() => setCollapsed(!collapsed)}>
+                {collapsed ? <IconRight /> : <IconLeft />}
+              </Button>
+              <PageHeader
+                title={currentRoute?.title}
+                style={{ padding: "0px 0px" }}
+              />
+            </Grid.Row>
+          </Card>
+        </Layout.Header>
+        <Layout.Content
+          style={{ padding: "1rem", background: "var(--color-neutral-1)" }}
+        >
+          <Card>
+            <Outlet />
+          </Card>
+        </Layout.Content>
       </Layout>
     </Layout>
   );

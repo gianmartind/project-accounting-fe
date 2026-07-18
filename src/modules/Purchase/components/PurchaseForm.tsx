@@ -192,7 +192,16 @@ const PurchaseForm = ({
                       <div style={centeredTextStyle}>Harga Total</div>
                     </Grid.GridItem>
                     <Grid.GridItem span={1}>
-                      <div style={centeredTextStyle}></div>
+                      <div style={centeredTextStyle}>
+                        <Button
+                          type="text"
+                          onClick={() => {
+                            add();
+                          }}
+                        >
+                          <IconPlus />
+                        </Button>
+                      </div>
                     </Grid.GridItem>
                   </Grid>
                 </div>
@@ -330,17 +339,6 @@ const PurchaseForm = ({
                     </div>
                   );
                 })}
-                <Grid.Row justify="end">
-                  <Button
-                    type="text"
-                    onClick={() => {
-                      add();
-                    }}
-                  >
-                    <IconPlus />
-                    Add Item
-                  </Button>
-                </Grid.Row>
               </Card>
             );
           }}
