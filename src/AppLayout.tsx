@@ -23,6 +23,7 @@ const AppLayout = () => {
       return (
         <MenuItem key={route.path}>
           <MenuIcon />
+          &nbsp;
           {route.title}
         </MenuItem>
       );
