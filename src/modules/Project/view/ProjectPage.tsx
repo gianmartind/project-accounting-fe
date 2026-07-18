@@ -284,7 +284,7 @@ const ProjectPage = () => {
             icon={<IconPlus />}
             onClick={handleAddNewProject}
           >
-            Tambah Project
+            Tambah Proyek
           </Button>
         </Space>
         <Table

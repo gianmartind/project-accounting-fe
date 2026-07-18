@@ -1,12 +1,12 @@
 import {
   Button,
+  Card,
   DatePicker,
   Form,
   Grid,
   Input,
   InputNumber,
   Select,
-  Space,
   type FormInstance,
 } from "@arco-design/web-react";
 import { type PurchaseDetail, type PurchaseItem } from "../purchase.interface";
@@ -157,14 +157,14 @@ const PurchaseForm = ({
         />
       </Form.Item>
       <Form.Item
-        label="Items"
+        label="Item"
         labelCol={FORM_LABEL_COL}
         wrapperCol={FORM_WRAPPER_COL}
       >
         <Form.List field="items">
           {(fields, { add, remove }) => {
             return (
-              <div>
+              <Card>
                 <div style={{ marginBottom: "2vh" }}>
                   <Grid cols={48} colGap={2} rowGap={4}>
                     <Grid.GridItem span={6}>
@@ -330,20 +330,18 @@ const PurchaseForm = ({
                     </div>
                   );
                 })}
-                <Space direction="horizontal">
-                  <Form.Item noStyle>
-                    <Button
-                      type="text"
-                      onClick={() => {
-                        add();
-                      }}
-                    >
-                      <IconPlus />
-                      Add Item
-                    </Button>
-                  </Form.Item>
-                </Space>
-              </div>
+                <Grid.Row justify="end">
+                  <Button
+                    type="text"
+                    onClick={() => {
+                      add();
+                    }}
+                  >
+                    <IconPlus />
+                    Add Item
+                  </Button>
+                </Grid.Row>
+              </Card>
             );
           }}
         </Form.List>
