@@ -1,11 +1,18 @@
-import { Button, Table, type PaginationProps } from "@arco-design/web-react";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Divider,
+  Table,
+  type PaginationProps,
+} from "@arco-design/web-react";
 import {
   IconBook,
   IconCalendar,
   IconFilter,
   IconSearch,
 } from "@arco-design/web-react/icon";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type {
   PurchaseItemListRecord,
   PurchaseItemListRecordFilter,
@@ -23,14 +30,19 @@ type Props = {
   onTableChange: (
     pagination: PaginationProps,
     sorter: SorterInfo | SorterInfo[],
-    filters: Partial<Record<keyof PurchaseItemListRecordFilter, string[]>>
+    filters: Partial<Record<keyof PurchaseItemListRecordFilter, string[]>>,
   ) => void;
   onOpenPurchase: (name: string) => void;
   loading?: boolean;
 };
 
-const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase, loading }: Props) => {
-  const columns = [
+const PurchaseItemTable = ({
+  data,
+  onTableChange,
+  onOpenPurchase,
+  loading,
+}: Props) => {
+  const columnData = useRef([
     {
       key: "purchase_date",
       title: "Tanggal",
@@ -258,22 +270,22 @@ const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase, loading }: Pro
         );
       },
     },
-    {
-      key: "action",
-      title: "",
-      dataIndex: "action",
-      width: 1,
-      render: (_: unknown, record: PurchaseItemListRecord) => {
-        return (
-          <Button
-            type="text"
-            icon={<IconBook />}
-            onClick={() => onOpenPurchase(record.purchase_uuid)}
-          ></Button>
-        );
-      },
+  ]);
+  const actionColumn = useRef({
+    key: "action",
+    title: "",
+    dataIndex: "action",
+    width: 1,
+    render: (_: unknown, record: PurchaseItemListRecord) => {
+      return (
+        <Button
+          type="text"
+          icon={<IconBook />}
+          onClick={() => onOpenPurchase(record.purchase_uuid)}
+        ></Button>
+      );
     },
-  ];
+  });
 
   const [pagination, setPagination] = useState<PaginationProps>({
     sizeCanChange: true,
@@ -298,20 +310,78 @@ const PurchaseItemTable = ({ data, onTableChange, onOpenPurchase, loading }: Pro
   const handleTableChange = (
     pagination: PaginationProps,
     sorter: SorterInfo | SorterInfo[],
-    filters: Partial<Record<keyof PurchaseItemListRecord, string[]>>
+    filters: Partial<Record<keyof PurchaseItemListRecord, string[]>>,
   ) => {
     onTableChange(pagination, sorter, filters);
   };
 
+  // Show/Hide Columns
+  const columnOptions = useRef([
+    { label: "Tanggal", value: "purchase_date" },
+    { label: "Proyek", value: "project_name" },
+    { label: "Toko", value: "store_name" },
+    { label: "Nama", value: "name" },
+    { label: "Jenis", value: "type" },
+    { label: "Merek", value: "brand" },
+    { label: "Kategori", value: "category" },
+    { label: "Jumlah", value: "amount" },
+    { label: "Satuan", value: "unit" },
+    { label: "Harga", value: "price" },
+    { label: "Harga Total", value: "total_price" },
+  ]);
+
+  const columnOptionValues = useMemo(() => {
+    return columnOptions.current.map((option) => option.value);
+  }, [columnOptions]);
+
+  const {
+    selected,
+    selectAll,
+    setSelected,
+    unSelectAll,
+    isAllSelected,
+    isPartialSelected,
+  } = Checkbox.useCheckbox(columnOptionValues, columnOptionValues);
+
+  const tableColumns = useMemo(() => {
+    const selectedColumns = columnData.current.filter((col) =>
+      selected.includes(col.key),
+    );
+    if (!selectedColumns.length) return [];
+    return [...selectedColumns, actionColumn.current];
+  }, [selected]);
   return (
-    <Table
-      rowKey="name"
-      columns={columns}
-      onChange={handleTableChange}
-      pagination={pagination}
-      data={data.content}
-      loading={loading}
-    />
+    <div>
+      <Card size="small" style={{ width: "100%" }}>
+        <Checkbox
+          onChange={(checked) => {
+            if (checked) {
+              selectAll();
+            } else {
+              unSelectAll();
+            }
+          }}
+          checked={isAllSelected()}
+          indeterminate={isPartialSelected()}
+        >
+          Show all
+        </Checkbox>
+        <Divider type="vertical" />
+        <Checkbox.Group
+          value={selected}
+          options={columnOptions.current}
+          onChange={setSelected}
+        />
+      </Card>
+      <Table
+        rowKey="name"
+        columns={tableColumns}
+        onChange={handleTableChange}
+        pagination={pagination}
+        data={data.content}
+        loading={loading}
+      />
+    </div>
   );
 };
 
