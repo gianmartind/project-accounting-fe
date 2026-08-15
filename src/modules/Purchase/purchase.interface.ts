@@ -29,12 +29,6 @@ export interface PurchaseListRecord {
   total_price: number;
 }
 
-export interface PurchaseListRecordFilter {
-  store_name?: string;
-  project_name?: string;
-  purchase_date?: string[];
-}
-
 export interface PurchaseListRecordRequest extends BaseListRecordRequest {
   store_name?: string;
   store_uuid?: string;

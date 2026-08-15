@@ -1,35 +1,18 @@
-import { Button, Table, type PaginationProps } from "@arco-design/web-react";
 import {
   IconCalendar,
-  IconExpand,
-  IconFilter,
   IconSearch,
+  IconExpand,
 } from "@arco-design/web-react/icon";
-import { useEffect, useState } from "react";
-import type {
-  PurchaseListRecord,
-} from "../purchase.interface";
-import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
+import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
 import InputSearchFilter from "../../../core/components/filters/components/InputSearchFilter";
 import type { FilterDropdownProps } from "../../../core/components/filters/interface/filter.interface";
-import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
-import NumberRangeFilter from "../../../core/components/filters/components/NumberRangeFilter";
+import type { GenericTableColumnConfig, ImplementedTableProps } from "../../../core/components/generic_table/generic-table.interface";
 import { rupiahFormat } from "../../../core/utils";
-import type { BaseListRecordResponse } from "../../../core/base.interface";
-
-type Props = {
-  data: BaseListRecordResponse<PurchaseListRecord>;
-  onTableChange: (
-    pagination: PaginationProps,
-    sorter: SorterInfo | SorterInfo[],
-    filters: Partial<Record<keyof PurchaseListRecord, string[]>>
-  ) => void;
-  onPuchaseDetailOpen: (uuid: string) => void;
-  loading?: boolean;
-};
-
-const PurchaseTable = ({ data, onTableChange, onPuchaseDetailOpen, loading }: Props) => {
-  const columns = [
+import type { PurchaseListRecord } from "../purchase.interface";
+import { Button } from "@arco-design/web-react";
+import GenericTable from "../../../core/components/generic_table/GenericTable";
+const PurchaseTable = ({ onDetailOpen, data, onTableChange, loading }: ImplementedTableProps<PurchaseListRecord>) => {
+  const columns: GenericTableColumnConfig<PurchaseListRecord>[] = [
     {
       key: "purchase_date",
       title: "Purchase Date",
@@ -98,32 +81,37 @@ const PurchaseTable = ({ data, onTableChange, onPuchaseDetailOpen, loading }: Pr
         return `Rp ${rupiahFormat(record.total_price)}`;
       },
       sorter: true,
-      filterIcon: <IconFilter />,
-      filterDropdown: ({
-        setFilterKeys,
-        filterKeys,
-        confirm,
-      }: FilterDropdownProps) => {
-        return (
-          <NumberRangeFilter
-            setFilterKeys={setFilterKeys}
-            filterKeys={filterKeys}
-            confirm={confirm}
-          />
-        );
-      },
+      // filterIcon: <IconFilter />,
+      // filterDropdown: ({
+      //   setFilterKeys,
+      //   filterKeys,
+      //   confirm,
+      // }: FilterDropdownProps) => {
+      //   return (
+      //     <NumberRangeFilter
+      //       setFilterKeys={setFilterKeys}
+      //       filterKeys={filterKeys}
+      //       confirm={confirm}
+      //     />
+      //   );
+      // },
     },
     {
       key: "action",
       title: "",
       dataIndex: "action",
       width: 1,
-      render: (_: unknown, record: PurchaseListRecord) => {
+      render: (
+        _: unknown,
+        record: PurchaseListRecord,
+        __: number,
+        onDetailOpen,
+      ) => {
         return (
           <Button
             type="text"
             icon={<IconExpand />}
-            onClick={() => onPuchaseDetailOpen(record.uuid)}
+            onClick={() => onDetailOpen && onDetailOpen(record.uuid)}
           >
             Detail
           </Button>
@@ -132,40 +120,12 @@ const PurchaseTable = ({ data, onTableChange, onPuchaseDetailOpen, loading }: Pr
     },
   ];
 
-  const [pagination, setPagination] = useState<PaginationProps>({
-    sizeCanChange: true,
-    showTotal: true,
-    total: 0,
-    pageSize: 10,
-    current: 1,
-    pageSizeChangeResetCurrent: true,
-  });
-  useEffect(() => {
-    setPagination({
-      sizeCanChange: true,
-      showTotal: true,
-      total: data.total_elements,
-      pageSize: data.size,
-      current: data.number + 1,
-      pageSizeChangeResetCurrent: true,
-    });
-  }, [data]);
-
-  const handleTableChange = (
-    pagination: PaginationProps,
-    sorter: SorterInfo | SorterInfo[],
-    filters: Partial<Record<keyof PurchaseListRecord, string[]>>
-  ) => {
-    onTableChange(pagination, sorter, filters);
-  };
-
   return (
-    <Table
-      rowKey="uuid"
+    <GenericTable
+      data={data}
       columns={columns}
-      onChange={handleTableChange}
-      pagination={pagination}
-      data={data.content}
+      onTableChange={onTableChange}
+      onDetailOpen={onDetailOpen}
       loading={loading}
     />
   );

@@ -17,20 +17,6 @@ export interface PurchaseItemListRecord {
   store_uuid: string;
 }
 
-export interface PurchaseItemListRecordFilter {
-  name?: string;
-  type?: string;
-  brand?: string;
-  category?: string;
-  unit?: string;
-  amount?: number[];
-  price?: number[];
-  total_price?: number[];
-  store_name?: string;
-  project_name?: string;
-  purchase_date?: string[];
-}
-
 export interface PurchaseItemListRecordRequest extends BaseListRecordRequest {
   name?: string;
   type?: string;

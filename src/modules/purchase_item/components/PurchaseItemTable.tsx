@@ -1,47 +1,29 @@
-import {
-  Button,
-  Card,
-  Checkbox,
-  Divider,
-  Table,
-  type PaginationProps,
-} from "@arco-design/web-react";
+import { Button, Card, Checkbox, Divider } from "@arco-design/web-react";
 import {
   IconBook,
   IconCalendar,
   IconFilter,
   IconSearch,
 } from "@arco-design/web-react/icon";
-import { useEffect, useMemo, useRef, useState } from "react";
-import type {
-  PurchaseItemListRecord,
-  PurchaseItemListRecordFilter,
-} from "../purchase-item.interface";
-import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
+import { useMemo, useRef } from "react";
+import type { PurchaseItemListRecord } from "../purchase-item.interface";
 import InputSearchFilter from "../../../core/components/filters/components/InputSearchFilter";
 import type { FilterDropdownProps } from "../../../core/components/filters/interface/filter.interface";
 import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
 import NumberRangeFilter from "../../../core/components/filters/components/NumberRangeFilter";
 import { rupiahFormat } from "../../../core/utils";
-import type { BaseListRecordResponse } from "../../../core/base.interface";
-
-type Props = {
-  data: BaseListRecordResponse<PurchaseItemListRecord>;
-  onTableChange: (
-    pagination: PaginationProps,
-    sorter: SorterInfo | SorterInfo[],
-    filters: Partial<Record<keyof PurchaseItemListRecordFilter, string[]>>,
-  ) => void;
-  onOpenPurchase: (name: string) => void;
-  loading?: boolean;
-};
+import type {
+  GenericTableColumnConfig,
+  ImplementedTableProps,
+} from "../../../core/components/generic_table/generic-table.interface";
+import GenericTable from "../../../core/components/generic_table/GenericTable";
 
 const PurchaseItemTable = ({
   data,
   onTableChange,
-  onOpenPurchase,
+  onDetailOpen,
   loading,
-}: Props) => {
+}: ImplementedTableProps<PurchaseItemListRecord>) => {
   const columnData = useRef([
     {
       key: "purchase_date",
@@ -271,49 +253,21 @@ const PurchaseItemTable = ({
       },
     },
   ]);
-  const actionColumn = useRef({
+  const actionColumn = useRef<GenericTableColumnConfig<PurchaseItemListRecord>>({
     key: "action",
     title: "",
     dataIndex: "action",
     width: 1,
-    render: (_: unknown, record: PurchaseItemListRecord) => {
+    render: (_: unknown, record: PurchaseItemListRecord, __, onDetailOpen) => {
       return (
         <Button
           type="text"
           icon={<IconBook />}
-          onClick={() => onOpenPurchase(record.purchase_uuid)}
+          onClick={() => onDetailOpen && onDetailOpen(record.purchase_uuid)}
         ></Button>
       );
     },
   });
-
-  const [pagination, setPagination] = useState<PaginationProps>({
-    sizeCanChange: true,
-    showTotal: true,
-    total: 0,
-    pageSize: 10,
-    current: 1,
-    pageSizeChangeResetCurrent: true,
-  });
-
-  useEffect(() => {
-    setPagination({
-      sizeCanChange: true,
-      showTotal: true,
-      total: data.total_elements,
-      pageSize: data.size,
-      current: data.number + 1,
-      pageSizeChangeResetCurrent: true,
-    });
-  }, [data]);
-
-  const handleTableChange = (
-    pagination: PaginationProps,
-    sorter: SorterInfo | SorterInfo[],
-    filters: Partial<Record<keyof PurchaseItemListRecord, string[]>>,
-  ) => {
-    onTableChange(pagination, sorter, filters);
-  };
 
   // Show/Hide Columns
   const columnOptions = useRef([
@@ -343,7 +297,9 @@ const PurchaseItemTable = ({
     isPartialSelected,
   } = Checkbox.useCheckbox(columnOptionValues, columnOptionValues);
 
-  const tableColumns = useMemo(() => {
+  const tableColumns = useMemo<
+    GenericTableColumnConfig<PurchaseItemListRecord>[]
+  >(() => {
     const selectedColumns = columnData.current.filter((col) =>
       selected.includes(col.key),
     );
@@ -373,12 +329,11 @@ const PurchaseItemTable = ({
           onChange={setSelected}
         />
       </Card>
-      <Table
-        rowKey="name"
+      <GenericTable
+        data={data}
         columns={tableColumns}
-        onChange={handleTableChange}
-        pagination={pagination}
-        data={data.content}
+        onTableChange={onTableChange}
+        onDetailOpen={onDetailOpen}
         loading={loading}
       />
     </div>

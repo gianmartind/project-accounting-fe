@@ -1,71 +1,17 @@
-import { Space, Button, type PaginationProps } from "@arco-design/web-react";
+import { Space, Button } from "@arco-design/web-react";
 import { IconPlus } from "@arco-design/web-react/icon";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
-import type {
-  PurchaseListRecord,
-  PurchaseListRecordFilter,
-  PurchaseListRecordRequest,
-} from "../purchase.interface";
-import usePurchaseService from "../purchase.service";
+import type { PurchaseListRecordRequest } from "../purchase.interface";
 import PurchaseTable from "../components/PurchaseTable";
-import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
-import useNotification from "../../../core/notification.service";
-import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
-import type { BaseListRecordResponse } from "../../../core/base.interface";
-
+import { usePurchaseTable } from "../composable/usePurchaseTable";
 const PurchasePage = () => {
-  const { fetchPurchaseRecord } = usePurchaseService();
-  const [tableLoading, setTableLoading] = useState<boolean>(false);
-  const [purchaseList, setPurchaseList] = useState<BaseListRecordResponse<PurchaseListRecord>>({
-    content: [],
-    total_elements: 0,
-    total_pages: 1,
-    size: 10,
-    number: 1,
-  });
-
-  const handleTableChange = (
-    pagination: PaginationProps,
-    sorter: SorterInfo | SorterInfo[],
-    filters: Partial<Record<keyof PurchaseListRecordFilter, string[]>>
-  ) => {
-    const sort =
-      !Array.isArray(sorter) && sorter.direction
-        ? `${sorter.field}:${sorter.direction}`
-        : undefined;
-    const param: PurchaseListRecordRequest = {
-      page: (pagination.current ?? 1) - 1,
-      size: pagination.pageSize ?? 10,
-      sort: sort,
-      project_name: filters.project_name ? filters.project_name[0] : undefined,
-      store_name: filters.store_name ? filters.store_name[0] : undefined,
-      purchase_date_from: filters.purchase_date
-        ? filters.purchase_date[0]
-        : undefined,
-      purchase_date_to: filters.purchase_date
-        ? filters.purchase_date[1]
-        : undefined,
-    };
-    getPurchaseRecordData(param);
-  };
-  const { failed } = useNotification();
-
-  const getPurchaseRecordData = useCallback(
-    async (param: PurchaseListRecordRequest) => {
-      try {
-        setTableLoading(true);
-        const response = await fetchPurchaseRecord(param);
-        setPurchaseList(response);
-      } catch (err) {
-        console.log(err);
-        failed(NOTIFICATION_MESSAGE.FETCH_FAILED);
-      } finally {
-        setTableLoading(false);
-      }
-    },
-    [failed, fetchPurchaseRecord]
-  );
+  const {
+    purchaseList,
+    handlePurchaseTableChange,
+    getPurchaseRecordData,
+    purchaseTableLoading,
+  } = usePurchaseTable();
 
   useEffect(() => {
     const param: PurchaseListRecordRequest = {
@@ -83,6 +29,7 @@ const PurchasePage = () => {
   const handleAddNewPurchase = () => {
     navigate("/purchase/new");
   };
+
   return (
     <div>
       <Space
@@ -101,10 +48,10 @@ const PurchasePage = () => {
           </Button>
         </Space>
         <PurchaseTable
-          onPuchaseDetailOpen={handleOpenPurchaseDetail}
+          onDetailOpen={handleOpenPurchaseDetail}
           data={purchaseList}
-          onTableChange={handleTableChange}
-          loading={tableLoading}
+          onTableChange={handlePurchaseTableChange}
+          loading={purchaseTableLoading}
         />
       </Space>
     </div>
