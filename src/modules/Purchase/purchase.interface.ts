@@ -1,3 +1,5 @@
+import type { BaseListRecordRequest } from "../../core/base.interface";
+
 export interface PurchaseDetail {
   uuid: string;
   store_name: string;
@@ -19,14 +21,6 @@ export interface PurchaseItem {
   purchase_uuid: string;
 }
 
-export interface PurchaseListRecordResponse {
-  content: PurchaseListRecord[];
-  total_elements: number;
-  total_pages: number;
-  size: number;
-  number: number;
-}
-
 export interface PurchaseListRecord {
   uuid: string;
   project_name: string;
@@ -41,16 +35,13 @@ export interface PurchaseListRecordFilter {
   purchase_date?: string[];
 }
 
-export interface PurchaseListRecordRequest {
+export interface PurchaseListRecordRequest extends BaseListRecordRequest {
   store_name?: string;
   store_uuid?: string;
   project_name?: string;
   project_uuid?: string;
   purchase_date_from?: string;
   purchase_date_to?: string;
-  page: number;
-  size: number;
-  sort?: string;
 }
 
 export interface AvailableFilterOptions {

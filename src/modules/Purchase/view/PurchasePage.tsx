@@ -3,20 +3,21 @@ import { IconPlus } from "@arco-design/web-react/icon";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type {
+  PurchaseListRecord,
   PurchaseListRecordFilter,
   PurchaseListRecordRequest,
-  PurchaseListRecordResponse,
 } from "../purchase.interface";
 import usePurchaseService from "../purchase.service";
 import PurchaseTable from "../components/PurchaseTable";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 import useNotification from "../../../core/notification.service";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
+import type { BaseListRecordResponse } from "../../../core/base.interface";
 
 const PurchasePage = () => {
   const { fetchPurchaseRecord } = usePurchaseService();
   const [tableLoading, setTableLoading] = useState<boolean>(false);
-  const [purchaseList, setPurchaseList] = useState<PurchaseListRecordResponse>({
+  const [purchaseList, setPurchaseList] = useState<BaseListRecordResponse<PurchaseListRecord>>({
     content: [],
     total_elements: 0,
     total_pages: 1,

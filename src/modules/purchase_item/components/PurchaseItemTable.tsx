@@ -16,7 +16,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type {
   PurchaseItemListRecord,
   PurchaseItemListRecordFilter,
-  PurchaseItemListRecordResponse,
 } from "../purchase-item.interface";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 import InputSearchFilter from "../../../core/components/filters/components/InputSearchFilter";
@@ -24,9 +23,10 @@ import type { FilterDropdownProps } from "../../../core/components/filters/inter
 import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
 import NumberRangeFilter from "../../../core/components/filters/components/NumberRangeFilter";
 import { rupiahFormat } from "../../../core/utils";
+import type { BaseListRecordResponse } from "../../../core/base.interface";
 
 type Props = {
-  data: PurchaseItemListRecordResponse;
+  data: BaseListRecordResponse<PurchaseItemListRecord>;
   onTableChange: (
     pagination: PaginationProps,
     sorter: SorterInfo | SorterInfo[],

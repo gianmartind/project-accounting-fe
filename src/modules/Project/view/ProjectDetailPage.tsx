@@ -15,9 +15,9 @@ import useNotification from "../../../core/notification.service";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
 import ProjectForm from "../components/ProjectForm";
 import type {
+  PurchaseListRecord,
   PurchaseListRecordFilter,
   PurchaseListRecordRequest,
-  PurchaseListRecordResponse,
 } from "../../Purchase/purchase.interface";
 import usePurchaseService from "../../Purchase/purchase.service";
 import PurchaseTable from "../../Purchase/components/PurchaseTable";
@@ -25,14 +25,15 @@ import { IconDelete, IconPlus } from "@arco-design/web-react/icon";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 import PurchaseItemTable from "../../purchase_item/components/PurchaseItemTable";
 import type {
+  PurchaseItemListRecord,
   PurchaseItemListRecordFilter,
   PurchaseItemListRecordRequest,
-  PurchaseItemListRecordResponse,
 } from "../../purchase_item/purchase-item.interface";
 import usePurchaseItemService from "../../purchase_item/purchase-item.service";
 import SummaryCard from "../../../core/components/SummaryCard";
 import useConfirmation from "../../../core/components/confirmation.services";
 import { rupiahFormat } from "../../../core/utils";
+import type { BaseListRecordResponse } from "../../../core/base.interface";
 
 const ProjectDetailPage = () => {
   const [pageLoading, setPageLoading] = useState<boolean>(false);
@@ -130,7 +131,7 @@ const ProjectDetailPage = () => {
     };
     getPurchaseRecordData(param);
   };
-  const [purchaseList, setPurchaseList] = useState<PurchaseListRecordResponse>({
+  const [purchaseList, setPurchaseList] = useState<BaseListRecordResponse<PurchaseListRecord>>({
     content: [],
     total_elements: 0,
     total_pages: 1,
@@ -167,7 +168,7 @@ const ProjectDetailPage = () => {
     [fetchPurchaseItemRecord, failed, setPurchaseItemTableLoading],
   );
   const [purchaseItemList, setPurchaseItemList] =
-    useState<PurchaseItemListRecordResponse>({
+    useState<BaseListRecordResponse<PurchaseItemListRecord>>({
       content: [],
       total_elements: 0,
       total_pages: 1,

@@ -8,7 +8,6 @@ import {
 import { useEffect, useState } from "react";
 import type {
   PurchaseListRecord,
-  PurchaseListRecordResponse,
 } from "../purchase.interface";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 import InputSearchFilter from "../../../core/components/filters/components/InputSearchFilter";
@@ -16,9 +15,10 @@ import type { FilterDropdownProps } from "../../../core/components/filters/inter
 import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
 import NumberRangeFilter from "../../../core/components/filters/components/NumberRangeFilter";
 import { rupiahFormat } from "../../../core/utils";
+import type { BaseListRecordResponse } from "../../../core/base.interface";
 
 type Props = {
-  data: PurchaseListRecordResponse;
+  data: BaseListRecordResponse<PurchaseListRecord>;
   onTableChange: (
     pagination: PaginationProps,
     sorter: SorterInfo | SorterInfo[],

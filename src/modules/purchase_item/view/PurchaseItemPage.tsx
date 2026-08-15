@@ -5,22 +5,23 @@ import usePurchaseItemService from "../purchase-item.service";
 import PurchaseItemTable from "../components/PurchaseItemTable";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 import type {
+  PurchaseItemListRecord,
   PurchaseItemListRecordFilter,
   PurchaseItemListRecordRequest,
-  PurchaseItemListRecordResponse,
   PurchaseItemSummary,
 } from "../purchase-item.interface";
 import SummaryCard from "../../../core/components/SummaryCard";
 import useNotification from "../../../core/notification.service";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
 import { rupiahFormat } from "../../../core/utils";
+import type { BaseListRecordResponse } from "../../../core/base.interface";
 
 const PurchaseItemPage = () => {
   const { fetchPurchaseItemRecord, fetchPurchaseItemSummary } =
     usePurchaseItemService();
   const [tableLoading, setTableLoading] = useState<boolean>(false);
   const [purchaseItemList, setPurchaseItemList] =
-    useState<PurchaseItemListRecordResponse>({
+    useState<BaseListRecordResponse<PurchaseItemListRecord>>({
       content: [],
       total_elements: 0,
       total_pages: 1,

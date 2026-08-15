@@ -1,4 +1,6 @@
-export interface ProjectSimple {
+import type { BaseListRecordRequest } from "../../core/base.interface";
+
+export interface ProjectListRecord {
   uuid: string;
   name: string;
   owner: string;
@@ -7,20 +9,12 @@ export interface ProjectSimple {
   end_date: string;
 }
 
-export interface ProjectSimpleResponse {
-  content: ProjectSimple[];
-  total_elements: number;
-  total_pages: number;
-  size: number;
-  number: number;
-}
-
-export interface ProjectDetail extends ProjectSimple {
+export interface ProjectDetail extends ProjectListRecord {
   address: string;
   notes: string;
 }
 
-export interface ProjectListRecordRequest {
+export interface ProjectListRecordRequest extends BaseListRecordRequest {
   name?: string;
   owner?: string;
   city?: string;
@@ -29,9 +23,6 @@ export interface ProjectListRecordRequest {
   end_date_from?: string;
   end_date_to?: string;
   status?: "COMPLETED" | "ONGOING";
-  page: number;
-  size: number;
-  sort?: string;
 }
 
 export interface ProjectListRecordFilter {

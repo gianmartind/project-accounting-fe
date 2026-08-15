@@ -2,20 +2,21 @@ import { http } from "../../core/http";
 import { useCallback } from "react";
 import { PURCHASE_ITEM_API_ENDPOINTS } from "./purchase-item.api";
 import type {
+  PurchaseItemListRecord,
   PurchaseItemListRecordRequest,
-  PurchaseItemListRecordResponse,
   PurchaseItemSummary,
 } from "./purchase-item.interface";
+import type { BaseListRecordResponse } from "../../core/base.interface";
 
 const usePurchaseItemService = () => {
   const fetchPurchaseItemRecord = useCallback(
     async (
       param: PurchaseItemListRecordRequest
-    ): Promise<PurchaseItemListRecordResponse> => {
+    ): Promise<BaseListRecordResponse<PurchaseItemListRecord>> => {
       const response = await http.get(PURCHASE_ITEM_API_ENDPOINTS.LIST, {
         params: param,
       });
-      return Promise.resolve(response.data as PurchaseItemListRecordResponse);
+      return Promise.resolve(response.data as BaseListRecordResponse<PurchaseItemListRecord>);
     },
     []
   );

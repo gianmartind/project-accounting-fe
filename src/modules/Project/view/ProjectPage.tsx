@@ -7,8 +7,7 @@ import {
 import type {
   ProjectListRecordFilter,
   ProjectListRecordRequest,
-  ProjectSimple,
-  ProjectSimpleResponse,
+  ProjectListRecord,
 } from "../project.interface";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useProjectService from "../project.service";
@@ -27,6 +26,7 @@ import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
 import RadioFilter from "../../../core/components/filters/components/RadioFilter";
 import useNotification from "../../../core/notification.service";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
+import type { BaseListRecordResponse } from "../../../core/base.interface";
 
 const ProjectPage = () => {
   const columns = useRef([
@@ -120,7 +120,7 @@ const ProjectPage = () => {
       dataIndex: "end_date",
       width: 100,
       sorter: true,
-      render: (_: unknown, record: ProjectSimple) => {
+      render: (_: unknown, record: ProjectListRecord) => {
         return record.end_date ?? "-";
       },
       filterIcon: <IconCalendar />,
@@ -143,7 +143,7 @@ const ProjectPage = () => {
       title: "Status",
       dataIndex: "status",
       width: 100,
-      render: (_: unknown, record: ProjectSimple) => {
+      render: (_: unknown, record: ProjectListRecord) => {
         return record.end_date ? "COMPLETED" : "ONGOING";
       },
       filterIcon: <IconList />,
@@ -167,7 +167,7 @@ const ProjectPage = () => {
       title: "",
       dataIndex: "action",
       width: 1,
-      render: (_: unknown, record: ProjectSimple) => {
+      render: (_: unknown, record: ProjectListRecord) => {
         return (
           <Button
             type="text"
@@ -181,7 +181,7 @@ const ProjectPage = () => {
     },
   ]);
 
-  const [projectList, setProjectList] = useState<ProjectSimpleResponse>({
+  const [projectList, setProjectList] = useState<BaseListRecordResponse<ProjectListRecord>>({
     content: [],
     total_elements: 0,
     total_pages: 1,
