@@ -1,187 +1,23 @@
-import {
-  Button,
-  Space,
-  Table,
-  type PaginationProps,
-} from "@arco-design/web-react";
+import { Button, Space, type PaginationProps } from "@arco-design/web-react";
 import type {
   ProjectListRecordFilter,
   ProjectListRecordRequest,
   ProjectListRecord,
 } from "../project.interface";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useProjectService from "../project.service";
-import {
-  IconCalendar,
-  IconExpand,
-  IconList,
-  IconPlus,
-  IconSearch,
-} from "@arco-design/web-react/icon";
+import { IconPlus } from "@arco-design/web-react/icon";
 import { useNavigate } from "react-router";
-import type { FilterDropdownProps } from "../../../core/components/filters/interface/filter.interface";
-import InputSearchFilter from "../../../core/components/filters/components/InputSearchFilter";
-import DateRangeFilter from "../../../core/components/filters/components/DateRangeFilter";
 import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
-import RadioFilter from "../../../core/components/filters/components/RadioFilter";
 import useNotification from "../../../core/notification.service";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
 import type { BaseListRecordResponse } from "../../../core/base.interface";
+import ProjectTable from "../components/ProjectTable";
 
 const ProjectPage = () => {
-  const columns = useRef([
-    {
-      key: "name",
-      title: "Nama",
-      dataIndex: "name",
-      width: 150,
-      sorter: true,
-      filterIcon: <IconSearch />,
-      filterDropdown: ({
-        setFilterKeys,
-        filterKeys,
-        confirm,
-      }: FilterDropdownProps) => {
-        return (
-          <InputSearchFilter
-            setFilterKeys={setFilterKeys}
-            filterKeys={filterKeys}
-            confirm={confirm}
-          />
-        );
-      },
-    },
-    {
-      key: "owner",
-      title: "Pemilik",
-      dataIndex: "owner",
-      width: 150,
-      sorter: true,
-      filterIcon: <IconSearch />,
-      filterDropdown: ({
-        setFilterKeys,
-        filterKeys,
-        confirm,
-      }: FilterDropdownProps) => {
-        return (
-          <InputSearchFilter
-            setFilterKeys={setFilterKeys}
-            filterKeys={filterKeys}
-            confirm={confirm}
-          />
-        );
-      },
-    },
-    {
-      key: "city",
-      title: "Kota",
-      dataIndex: "city",
-      width: 150,
-      sorter: true,
-      filterIcon: <IconSearch />,
-      filterDropdown: ({
-        setFilterKeys,
-        filterKeys,
-        confirm,
-      }: FilterDropdownProps) => {
-        return (
-          <InputSearchFilter
-            setFilterKeys={setFilterKeys}
-            filterKeys={filterKeys}
-            confirm={confirm}
-          />
-        );
-      },
-    },
-    {
-      key: "start_date",
-      title: "Mulai",
-      dataIndex: "start_date",
-      width: 100,
-      sorter: true,
-      filterIcon: <IconCalendar />,
-      filterDropdown: ({
-        setFilterKeys,
-        filterKeys,
-        confirm,
-      }: FilterDropdownProps) => {
-        return (
-          <DateRangeFilter
-            setFilterKeys={setFilterKeys}
-            filterKeys={filterKeys}
-            confirm={confirm}
-          />
-        );
-      },
-    },
-    {
-      key: "end_date",
-      title: "Selesai",
-      dataIndex: "end_date",
-      width: 100,
-      sorter: true,
-      render: (_: unknown, record: ProjectListRecord) => {
-        return record.end_date ?? "-";
-      },
-      filterIcon: <IconCalendar />,
-      filterDropdown: ({
-        setFilterKeys,
-        filterKeys,
-        confirm,
-      }: FilterDropdownProps) => {
-        return (
-          <DateRangeFilter
-            setFilterKeys={setFilterKeys}
-            filterKeys={filterKeys}
-            confirm={confirm}
-          />
-        );
-      },
-    },
-    {
-      key: "status",
-      title: "Status",
-      dataIndex: "status",
-      width: 100,
-      render: (_: unknown, record: ProjectListRecord) => {
-        return record.end_date ? "COMPLETED" : "ONGOING";
-      },
-      filterIcon: <IconList />,
-      filterDropdown: ({
-        setFilterKeys,
-        filterKeys,
-        confirm,
-      }: FilterDropdownProps) => {
-        return (
-          <RadioFilter
-            setFilterKeys={setFilterKeys}
-            filterKeys={filterKeys}
-            confirm={confirm}
-            options={["ONGOING", "COMPLETED"]}
-          />
-        );
-      },
-    },
-    {
-      key: "action",
-      title: "",
-      dataIndex: "action",
-      width: 1,
-      render: (_: unknown, record: ProjectListRecord) => {
-        return (
-          <Button
-            type="text"
-            icon={<IconExpand />}
-            onClick={() => handleOpenProjectDetail(record.uuid)}
-          >
-            Detail
-          </Button>
-        );
-      },
-    },
-  ]);
-
-  const [projectList, setProjectList] = useState<BaseListRecordResponse<ProjectListRecord>>({
+  const [projectList, setProjectList] = useState<
+    BaseListRecordResponse<ProjectListRecord>
+  >({
     content: [],
     total_elements: 0,
     total_pages: 1,
@@ -205,7 +41,7 @@ const ProjectPage = () => {
         setTableLoading(false);
       }
     },
-    [failed, fetchProjects]
+    [failed, fetchProjects],
   );
 
   useEffect(() => {
@@ -216,17 +52,6 @@ const ProjectPage = () => {
     getProjectList(param);
   }, [getProjectList]);
 
-  useEffect(() => {
-    setPagination({
-      sizeCanChange: true,
-      showTotal: true,
-      total: projectList.total_elements,
-      pageSize: projectList.size,
-      current: projectList.number + 1,
-      pageSizeChangeResetCurrent: true,
-    });
-  }, [projectList]);
-
   const navigate = useNavigate();
   const handleOpenProjectDetail = (uuid: string) => {
     navigate(`/project/detail/${uuid}`);
@@ -234,19 +59,10 @@ const ProjectPage = () => {
   const handleAddNewProject = () => {
     navigate("/project/new");
   };
-
-  const [pagination, setPagination] = useState<PaginationProps>({
-    sizeCanChange: true,
-    showTotal: true,
-    total: 0,
-    pageSize: 10,
-    current: 1,
-    pageSizeChangeResetCurrent: true,
-  });
   const handleTableChange = (
     pagination: PaginationProps,
     sorter: SorterInfo | SorterInfo[],
-    filters: Partial<Record<keyof ProjectListRecordFilter, string[]>>
+    filters: Partial<Record<keyof ProjectListRecordFilter, string[]>>,
   ) => {
     const sort =
       !Array.isArray(sorter) && sorter.direction
@@ -287,12 +103,10 @@ const ProjectPage = () => {
             Tambah Proyek
           </Button>
         </Space>
-        <Table
-          rowKey="uuid"
-          columns={columns.current}
-          data={projectList.content}
-          pagination={pagination}
-          onChange={handleTableChange}
+        <ProjectTable
+          data={projectList}
+          onTableChange={handleTableChange}
+          onDetailOpen={handleOpenProjectDetail}
           loading={tableLoading}
         />
       </Space>
