@@ -14,7 +14,7 @@ import PurchaseDetailPage from "./modules/Purchase/view/PuchaseDetailPage";
 import PurchaseItemPage from "./modules/PurchaseItem/view/PurchaseItemPage";
 import StorePage from "./modules/Store/view/StorePage";
 import StoreDetailPage from "./modules/Store/view/StoreDetailPage";
-import StoreNewPage from "./modules/Store/view/ProjectNewPage";
+import StoreNewPage from "./modules/Store/view/StoreNewPage";
 
 export type RouteItem = {
   path: string;

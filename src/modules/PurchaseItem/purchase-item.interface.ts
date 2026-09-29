@@ -1,6 +1,7 @@
 import type { BaseListRecordRequest } from "../../core/base.interface";
 
 export interface PurchaseItemListRecord {
+  uuid: string;
   name: string;
   type: string;
   brand: string;

@@ -14,7 +14,13 @@ const StoreDetailPage = () => {
   const { uuid } = useParams();
   const { fetchStoreDetail, deleteStore, updateStore, fetchStoreTags } =
     useStoreService();
-  const [originalStoreDetail, setOriginalStoreDetail] = useState<StoreDetail>();
+  const [originalStoreDetail, setOriginalStoreDetail] = useState<StoreDetail>({
+    uuid: "",
+    name: "",
+    address: "",
+    tags: [],
+    notes: "",
+  });
   const [tagOptions, setTagOptions] = useState<string[]>([]);
   const [form] = Form.useForm<StoreDetail>();
 

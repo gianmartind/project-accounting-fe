@@ -31,7 +31,16 @@ const ProjectDetailPage = () => {
   const { fetchProjectDetail, deleteProject, updateProject } =
     useProjectService();
   const [originalProjectDetail, setOriginalProjectDetail] =
-    useState<ProjectDetail>();
+    useState<ProjectDetail>({
+      uuid: "",
+      name: "",
+      owner: "",
+      city: "",
+      start_date: "",
+      end_date: "",
+      address: "",
+      notes: "",
+    });
 
   const [form] = Form.useForm<ProjectDetail>();
 

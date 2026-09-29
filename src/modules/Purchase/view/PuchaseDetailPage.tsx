@@ -15,7 +15,14 @@ const PurchaseDetailPage = () => {
   const { fetchPurchaseDetail, updatePurchase, deletePurchase } =
     usePurchaseService();
   const [originalPurchaseDetail, setOriginalPurchaseDetail] =
-    useState<PurchaseDetail>();
+    useState<PurchaseDetail>({
+      uuid: "",
+      store_name: "",
+      project_uuid: "",
+      purchase_date: "",
+      items: [],
+      notes: "",
+    });
   const [form] = Form.useForm<PurchaseDetail>();
 
   useEffect(() => {
