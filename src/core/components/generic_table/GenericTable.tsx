@@ -53,6 +53,7 @@ const GenericTable = <T,>({
       pagination={pagination}
       data={data.content}
       loading={loading}
+      rowKey="uuid"
     />
   );
 };

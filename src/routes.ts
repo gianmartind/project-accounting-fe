@@ -1,4 +1,5 @@
 import {
+  IconArchive,
   IconBook,
   IconHome,
   IconStorage,
@@ -10,7 +11,10 @@ import ProjectDetailPage from "./modules/Project/view/ProjectDetailPage";
 import ProjectNewPage from "./modules/Project/view/ProjectNewPage";
 import PurchaseNewPage from "./modules/Purchase/view/PurchaseNewPage";
 import PurchaseDetailPage from "./modules/Purchase/view/PuchaseDetailPage";
-import PurchaseItemPage from "./modules/purchase_item/view/PurchaseItemPage";
+import PurchaseItemPage from "./modules/PurchaseItem/view/PurchaseItemPage";
+import StorePage from "./modules/Store/view/StorePage";
+import StoreDetailPage from "./modules/Store/view/StoreDetailPage";
+import StoreNewPage from "./modules/Store/view/ProjectNewPage";
 
 export type RouteItem = {
   path: string;
@@ -63,5 +67,22 @@ export const routes: RouteItem[] = [
     icon: IconStorage,
     component: PurchaseItemPage,
     sidebarMenu: true,
-  }
+  },
+  {
+    path: "/store",
+    title: "Toko",
+    icon: IconArchive,
+    component: StorePage,
+    sidebarMenu: true,
+  },
+  {
+    path: "/store/detail/:uuid",
+    title: "Toko",
+    component: StoreDetailPage,
+  },
+  {
+    path: "/store/new",
+    title: "Toko",
+    component: StoreNewPage,
+  },
 ];

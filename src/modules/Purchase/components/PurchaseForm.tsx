@@ -11,12 +11,12 @@ import {
 } from "@arco-design/web-react";
 import { type PurchaseDetail, type PurchaseItem } from "../purchase.interface";
 import { IconDelete, IconPlus, IconSave } from "@arco-design/web-react/icon";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import useProjectService from "../../Project/project.service";
-import useStoreService from "../../store/store.service";
-import usePurchaseItemService from "../../purchase_item/purchase-item.service";
+import useStoreService from "../../Store/store.service";
+import usePurchaseItemService from "../../PurchaseItem/purchase-item.service";
 import type { ProjectListRecordRequest } from "../../Project/project.interface";
-import { FORM_LABEL_COL, FORM_WRAPPER_COL } from "../../../core/form.constant";
+import { FORM_LABEL_COL, FORM_WRAPPER_COL, RULE_REQUIRED } from "../../../core/form.constant";
 
 type Props = {
   form: FormInstance<PurchaseDetail>;
@@ -33,12 +33,6 @@ const PurchaseForm = ({
   saveDisabled = false,
   onSave,
 }: Props) => {
-  const required = useRef([
-    {
-      required: true,
-      message: "Required",
-    },
-  ]);
   const {
     fetchItemTypes,
     fetchItemUnits,
@@ -46,7 +40,7 @@ const PurchaseForm = ({
     fetchItemCategories,
   } = usePurchaseItemService();
   const { fetchProjects } = useProjectService();
-  const { fetchStoresName } = useStoreService();
+  const { fetchStoreNames } = useStoreService();
   const [storesName, setStoresName] = useState<string[]>();
   const [typesList, setTypesList] = useState<string[]>();
   const [unitsList, setUnitsList] = useState<string[]>();
@@ -79,7 +73,7 @@ const PurchaseForm = ({
       setProjectOptions(optionList);
       onProjectOptionsLoaded();
     });
-    fetchStoresName().then((response) => {
+    fetchStoreNames().then((response) => {
       setStoresName(response);
     });
     fetchItemTypes().then((response) => {
@@ -95,7 +89,7 @@ const PurchaseForm = ({
       setBrandsList(response);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchItemTypes, fetchItemUnits, fetchProjects, fetchStoresName]);
+  }, [fetchItemTypes, fetchItemUnits, fetchProjects, fetchStoreNames]);
 
   const [, forceUpdate] = useState({});
   const handleFormChange = () => {
@@ -115,7 +109,7 @@ const PurchaseForm = ({
       <Form.Item
         label="Toko"
         field="store_name"
-        rules={required.current}
+        rules={RULE_REQUIRED}
         labelCol={FORM_LABEL_COL}
         wrapperCol={FORM_WRAPPER_COL}
       >
@@ -129,7 +123,7 @@ const PurchaseForm = ({
       <Form.Item
         label="Proyek"
         field="project_uuid"
-        rules={required.current}
+        rules={RULE_REQUIRED}
         labelCol={FORM_LABEL_COL}
         wrapperCol={FORM_WRAPPER_COL}
       >
@@ -138,7 +132,7 @@ const PurchaseForm = ({
       <Form.Item
         label="Tanggal"
         field="purchase_date"
-        rules={required.current}
+        rules={RULE_REQUIRED}
         labelCol={FORM_LABEL_COL}
         wrapperCol={FORM_WRAPPER_COL}
       >
@@ -219,7 +213,7 @@ const PurchaseForm = ({
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.name`}
-                                rules={required.current}
+                                rules={RULE_REQUIRED}
                                 noStyle
                               >
                                 <Input placeholder="Nama" />
@@ -230,7 +224,7 @@ const PurchaseForm = ({
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.type`}
-                                rules={required.current}
+                                rules={RULE_REQUIRED}
                                 noStyle
                               >
                                 <Select
@@ -246,7 +240,7 @@ const PurchaseForm = ({
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.category`}
-                                rules={required.current}
+                                rules={RULE_REQUIRED}
                                 noStyle
                               >
                                 <Select
@@ -262,7 +256,7 @@ const PurchaseForm = ({
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.brand`}
-                                rules={required.current}
+                                rules={RULE_REQUIRED}
                                 noStyle
                               >
                                 <Select
@@ -278,7 +272,7 @@ const PurchaseForm = ({
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.amount`}
-                                rules={required.current}
+                                rules={RULE_REQUIRED}
                                 noStyle
                               >
                                 <InputNumber placeholder="Jumlah" min={1} />
@@ -289,7 +283,7 @@ const PurchaseForm = ({
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.unit`}
-                                rules={required.current}
+                                rules={RULE_REQUIRED}
                                 noStyle
                               >
                                 <Select
@@ -305,7 +299,7 @@ const PurchaseForm = ({
                             <div style={centeredTextStyle}>
                               <Form.Item
                                 field={`${item.field}.price`}
-                                rules={required.current}
+                                rules={RULE_REQUIRED}
                                 noStyle
                               >
                                 <InputNumber prefix="Rp" placeholder="Satuan" />

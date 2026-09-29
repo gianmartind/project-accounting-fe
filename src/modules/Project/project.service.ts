@@ -19,7 +19,7 @@ const useProjectService = () => {
     []
   );
 
-  const getProjectDetail = useCallback(
+  const fetchProjectDetail = useCallback(
     async (uuid: string): Promise<ProjectDetail> => {
       const response = await http.get(
         `${PROJECT_API_ENDPOINTS.DETAIL}/${uuid}`
@@ -52,7 +52,7 @@ const useProjectService = () => {
 
   return {
     fetchProjects,
-    getProjectDetail,
+    fetchProjectDetail,
     updateProject,
     deleteProject,
     insertProject,

@@ -5,7 +5,6 @@ import {
   Space,
   Spin,
   Typography,
-  type PaginationProps,
 } from "@arco-design/web-react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -14,31 +13,22 @@ import type { ProjectDetail } from "../project.interface";
 import useNotification from "../../../core/notification.service";
 import { NOTIFICATION_MESSAGE } from "../../../core/notification.constant";
 import ProjectForm from "../components/ProjectForm";
-import type {
-  PurchaseListRecord,
-  PurchaseListRecordRequest,
-} from "../../Purchase/purchase.interface";
-import usePurchaseService from "../../Purchase/purchase.service";
+import type { PurchaseListRecordRequest } from "../../Purchase/purchase.interface";
 import { IconDelete, IconPlus } from "@arco-design/web-react/icon";
-import type { SorterInfo } from "@arco-design/web-react/es/Table/interface";
-import PurchaseItemTable from "../../purchase_item/components/PurchaseItemTable";
-import type {
-  PurchaseItemListRecord,
-  PurchaseItemListRecordRequest,
-} from "../../purchase_item/purchase-item.interface";
-import usePurchaseItemService from "../../purchase_item/purchase-item.service";
+import PurchaseItemTable from "../../PurchaseItem/components/PurchaseItemTable";
+import type { PurchaseItemListRecordRequest } from "../../PurchaseItem/purchase-item.interface";
+import usePurchaseItemService from "../../PurchaseItem/purchase-item.service";
 import SummaryCard from "../../../core/components/SummaryCard";
 import useConfirmation from "../../../core/components/confirmation.services";
 import { rupiahFormat } from "../../../core/utils";
-import type { BaseListRecordResponse } from "../../../core/base.interface";
 import PurchaseTable from "../../Purchase/components/PurchaseTable";
 import { usePurchaseTable } from "../../Purchase/composable/usePurchaseTable";
-import { usePurchaseItemTable } from "../../purchase_item/composable/usePurchaseItemTable";
+import { usePurchaseItemTable } from "../../PurchaseItem/composable/usePurchaseItemTable";
 
 const ProjectDetailPage = () => {
   const [pageLoading, setPageLoading] = useState<boolean>(false);
   const { uuid } = useParams();
-  const { getProjectDetail, deleteProject, updateProject } =
+  const { fetchProjectDetail, deleteProject, updateProject } =
     useProjectService();
   const [originalProjectDetail, setOriginalProjectDetail] =
     useState<ProjectDetail>();
@@ -47,13 +37,13 @@ const ProjectDetailPage = () => {
 
   useEffect(() => {
     setPageLoading(true);
-    getProjectDetail(uuid ?? "")
+    fetchProjectDetail(uuid ?? "")
       .then((response) => {
         setOriginalProjectDetail(response);
         form.setFieldsValue({ ...response });
       })
       .finally(() => setPageLoading(false));
-  }, [getProjectDetail, uuid, form]);
+  }, [fetchProjectDetail, uuid, form]);
 
   const [formIsValid, setFormIsValid] = useState<boolean>(false);
 

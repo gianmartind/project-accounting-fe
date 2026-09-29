@@ -9,7 +9,7 @@ import type {
 import type { BaseListRecordResponse } from "../../core/base.interface";
 
 const usePurchaseService = () => {
-  const fetchPurchaseRecord = useCallback(
+  const fetchPurchases = useCallback(
     async (
       param: PurchaseListRecordRequest
     ): Promise<BaseListRecordResponse<PurchaseListRecord>> => {
@@ -59,7 +59,7 @@ const usePurchaseService = () => {
   );
 
   return {
-    fetchPurchaseRecord,
+    fetchPurchaseRecord: fetchPurchases,
     insertPurchase,
     updatePurchase,
     deletePurchase,
